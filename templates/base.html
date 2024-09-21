@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tsoha-forum</title>
+</head>
+<body>
+    <header>
+        <h1>Tsoha-forum</h1>
+    </header>
+ <nav>
+        <a href="{{url_for('index')}}">Etusivu</a>
+        {% if session.user_id %}
+        <a href="{{url_for('logout')}}">Kirjaudu ulos</a>
+        {% else %}
+        <a href="{{url_for('login')}}">Kirjaudu sisään</a>
+        {% endif %}
+    </nav>
+    <br>
+    <main>{% block content %}{% endblock %}</main>
+    <br>
+    <footer>Footer</footer>
+    
+</body>
+</html>
