@@ -24,3 +24,17 @@ def register(username, password):
     except exc.IntegrityError:
         return False
     return True
+
+
+def login(username, password):
+    sql = text("SELECT id, password FROM users where username=:username")
+    result = db.session.execute(sql, {"username": username})
+    user = result.fetchone()
+    if user and check_password_hash(user.password, password):
+        session["user_id"] = user.id
+        return True
+    return False
+
+
+def logout():
+    del session["user_id"]

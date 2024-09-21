@@ -8,6 +8,25 @@ def index():
     return "Hello, World!"
 
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "GET":
+        return render_template("login.html")
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        if users.login(username, password):
+            return redirect("/")
+        message = "Väärä käyttäjätunnus tai salasana"
+        return render_template("error.html", message=message)
+
+
+@app.route("/logout")
+def logout():
+    users.logout()
+    return redirect("/")
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
