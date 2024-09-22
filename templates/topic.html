@@ -8,7 +8,7 @@
 <p>{{post.content}}</p>
 <hr>
 {% endfor %}
-
+{% if session.user_id %}
 <form action="/topic/{{topic.id}}" method="post">
     <input type="hidden" name="topic_id" id="topic_id" value="{{topic_id}}">
     <p>
@@ -17,4 +17,5 @@
     </p>
     <input type="submit" value="Lähetä">
 </form>
+{% endif %}
 {% endblock %}
