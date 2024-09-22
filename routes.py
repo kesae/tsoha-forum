@@ -2,6 +2,8 @@ from flask import redirect, render_template, request, session
 from app import app
 import users
 import boards
+import topics
+import posts
 
 
 @app.route("/")
@@ -70,4 +72,40 @@ def board(id):
     board_data = boards.get_board(id)
     if not board_data:
         return render_template("error.html", message="Sivua ei löydy")
-    return render_template("board.html", board=board_data)
+    board_topics = topics.get_topics(id)
+    return render_template("board.html", board=board_data, topics=board_topics)
+
+
+@app.route("/new_topic/<int:board_id>", methods=["GET", "POST"])
+def new_topic(board_id):
+    user_id = session.get("user_id", None)
+    if not user_id:
+        return render_template("error.html", message="Toiminto vaatii kirjautumisen")
+    if request.method == "GET":
+        return render_template("new_topic.html", board_id=board_id)
+    if request.method == "POST":
+        board_id = int(request.form["board_id"])
+        title = request.form["title"]
+        content = request.form["content"]
+        topic_id = topics.add_topic(title, board_id)
+        if topic_id:
+            posts.add_post(user_id, content, topic_id)
+            return redirect(f"/board/{board_id}")
+        return render_template("error.html", message="Lähettäminen ei onnistunut")
+
+
+@app.route("/topic/<int:topic_id>", methods=["GET", "POST"])
+def topic(topic_id):
+    topic_data = topics.get_board_topic(topic_id)
+    topic_posts = posts.get_posts(topic_id)
+    if request.method == "GET":
+        return render_template("topic.html", posts=topic_posts, topic=topic_data)
+    if request.method == "POST":
+        user_id = session.get("user_id")
+        if not user_id:
+            return render_template(
+                "error.html", message="Toiminto vaatii kirjautumisen"
+            )
+        content = request.form["content"]
+        posts.add_post(user_id, content, topic_id)
+        return redirect(f"/topic/{topic_id}")

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="/new_topic/{{board_id}}" method="post">
+    <input type="hidden" name="board_id" id="board_id" value="{{board_id}}">
+    <p>
+        <label for="title">Otsikko:</label>
+        <input type="text" name="title">
+    </p>
+    <p>
+        <label for="content">Viesti:</label>
+        <input type="text" name="content">
+    </p>
+    <input type="submit" value="Lähetä">
+</form>
+{% endblock %}

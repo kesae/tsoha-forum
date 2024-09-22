@@ -2,5 +2,10 @@
 
 {% block content %}
 <h2>{{board.title}}</h2>
-Aiheet tulevat tänne
+{% for topic in topics %}
+<a href="/topic/{{topic.id}}" >{{topic.title}}</a>
+<hr>
+{% endfor %}
+<hr>
+<a href="{{url_for('new_topic', board_id=board.id)}}"><b>Luo uusi aihe</b></a>
 {% endblock %}
