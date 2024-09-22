@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="/new_board" method="post">
+    <p>
+        <label for="title">Otsikko:</label>
+        <input type="text" name="title">
+    </p>
+    <p>
+        <label for="description">Kuvaus:</label>
+        <input type="text" name="description">
+    </p>
+    <input type="submit" value="Lähetä">
+</form>
+{% endblock %}

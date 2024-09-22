@@ -1,5 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-Etusivu
+<h2>Alueet</h2>
+{% for board in boards %}
+<section>
+    <a href="{{url_for('board', id=board.id)}}">
+        <b>{{board.title}}</b>
+    <a>
+    <p>{{board.description}}</p>
+</section>
+<hr>
+{% endfor %}
+{% if is_admin %}
+<a href="{{url_for('edit_boards')}}">Muokkaa alueita</a>
+{% endif %}
 {% endblock %}
