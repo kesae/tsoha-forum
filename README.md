@@ -38,7 +38,7 @@ Sovellus sisältää vasta minimaaliset ominaisuudet, jotka mahdollistavat viest
 
 ## Käyttö
 
-Sovellus on saatavilla https://tsoha-forum.fly.dev/ . Siihen voi kirjautua valmiilla tileillä `admin:tsoha1` ja `user:tsoha2`, joista ensimmäisellä on admin-oikeudet.
+Sovellus on saatavilla https://tsoha-forum.fly.dev/ . Siihen voi kirjautua valmiilla tileillä `admin:tsoha1` ja `user:tsoha2`, joista ensimmäisellä on ylläpitäjän oikeudet.
 
 Vaihtoehtoinen paikallinen asennusohje Linuxille:
 - Kloonaa tämä repositorio.
