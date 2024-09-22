@@ -44,7 +44,9 @@ def register():
             return render_template("error.html", message="Salasanat eroavat")
         if users.register(username, password1):
             return redirect("/")
-        return render_template("error.html", message="Rekisteröinti ei onnistunut")
+        return render_template(
+            "error.html", message="Rekisteröinti ei onnistunut"
+        )
 
 
 @app.route("/edit_boards")
@@ -80,7 +82,9 @@ def board(id):
 def new_topic(board_id):
     user_id = session.get("user_id", None)
     if not user_id:
-        return render_template("error.html", message="Toiminto vaatii kirjautumisen")
+        return render_template(
+            "error.html", message="Toiminto vaatii kirjautumisen"
+        )
     if request.method == "GET":
         return render_template("new_topic.html", board_id=board_id)
     if request.method == "POST":
@@ -91,7 +95,9 @@ def new_topic(board_id):
         if topic_id:
             posts.add_post(user_id, content, topic_id)
             return redirect(f"/board/{board_id}")
-        return render_template("error.html", message="Lähettäminen ei onnistunut")
+        return render_template(
+            "error.html", message="Lähettäminen ei onnistunut"
+        )
 
 
 @app.route("/topic/<int:topic_id>", methods=["GET", "POST"])
@@ -99,7 +105,9 @@ def topic(topic_id):
     topic_data = topics.get_board_topic(topic_id)
     topic_posts = posts.get_posts(topic_id)
     if request.method == "GET":
-        return render_template("topic.html", posts=topic_posts, topic=topic_data)
+        return render_template(
+            "topic.html", posts=topic_posts, topic=topic_data
+        )
     if request.method == "POST":
         user_id = session.get("user_id")
         if not user_id:

@@ -15,7 +15,10 @@ def get_boards():
 
 
 def add_board(title, description):
-    sql = text("INSERT INTO boards (title, description) VALUES (:title, :description)")
+    sql = text(
+        "INSERT INTO boards (title, description) "
+        "VALUES (:title, :description)"
+    )
     params = {"title": title, "description": description}
     db.session.execute(sql, params)
     db.session.commit()

@@ -19,7 +19,8 @@ def get_topics(board_id):
 
 def add_topic(title, board_id):
     sql = text(
-        "INSERT INTO topics (title,board_id) VALUES (:title,:board_id) RETURNING id"
+        "INSERT INTO topics (title,board_id) "
+        "VALUES (:title,:board_id) RETURNING id"
     )
     params = {"title": title, "board_id": board_id}
     result = db.session.execute(sql, params)
