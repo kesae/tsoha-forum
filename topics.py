@@ -12,7 +12,25 @@ def get_board_topic(topic_id):
 
 
 def get_topics(board_id):
-    sql = text("SELECT id, title FROM topics WHERE board_id=:board_id")
+    sql_string = """
+        SELECT
+            t.id id,
+            t.title title,
+            COUNT(p.id) post_count,
+            MAX(p.created_at) latest_post_at 
+        FROM
+            topics t 
+            LEFT JOIN
+                posts p 
+                ON t.id = topic_id 
+        WHERE
+            t.board_id = :board_id 
+        GROUP BY
+            t.id 
+        ORDER BY
+            latest_post_at ASC;
+    """
+    sql = text(sql_string)
     result = db.session.execute(sql, {"board_id": board_id})
     return result.fetchall()
 
