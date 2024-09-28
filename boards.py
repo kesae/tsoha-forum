@@ -9,7 +9,26 @@ def get_board(id):
 
 
 def get_boards():
-    sql = text("SELECT id, title, description FROM boards")
+    sql_string = """
+        SELECT
+            b.id id,
+            b.title title,
+            b.description description,
+            COUNT(DISTINCT t.id) topic_count,
+            COUNT(p.id) post_count,
+            MAX(created_at) latest_post_at 
+        FROM
+            boards b 
+            LEFT JOIN
+                topics t 
+                ON b.id = t.board_id 
+            LEFT JOIN
+                posts p 
+                ON t.id = p.topic_id 
+        GROUP BY
+            b.id;
+    """
+    sql = text(sql_string)
     result = db.session.execute(sql)
     return result.fetchall()
 
