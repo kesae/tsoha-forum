@@ -11,6 +11,9 @@ CREATE TABLE IF NOT EXISTS boards (
 );
 CREATE TABLE IF NOT EXISTS topics (
     id SERIAL PRIMARY KEY,
+    user_id INTEGER
+        REFERENCES users (id)
+        ON DELETE CASCADE,
     title TEXT,
     board_id INTEGER
         REFERENCES boards (id)
