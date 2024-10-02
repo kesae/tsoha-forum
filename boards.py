@@ -2,9 +2,19 @@ from sqlalchemy import text
 from app import db
 
 
-def get_board(id):
-    sql = text("SELECT id, title, description FROM boards WHERE id=:id")
-    result = db.session.execute(sql, {"id": id})
+def get_board(board_id):
+    sql_string = """
+        SELECT
+            id,
+            title,
+            description 
+        FROM
+            boards 
+        WHERE
+            id = :id;
+    """
+    sql = text(sql_string)
+    result = db.session.execute(sql, {"id": board_id})
     return result.fetchone()
 
 
@@ -34,10 +44,13 @@ def get_boards():
 
 
 def add_board(title, description):
-    sql = text(
-        "INSERT INTO boards (title, description) "
-        "VALUES (:title, :description)"
-    )
+    sql_string = """
+        INSERT INTO
+            boards (title, description) 
+        VALUES
+            (:title, :description);
+    """
+    sql = text(sql_string)
     params = {"title": title, "description": description}
     db.session.execute(sql, params)
     db.session.commit()

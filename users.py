@@ -4,7 +4,7 @@ from sqlalchemy import text, exc
 from app import db
 
 
-def users_exists():
+def users_exist():
     sql = text("SELECT id FROM users LIMIT 1")
     result = db.session.execute(sql)
     return bool(result.fetchone())
@@ -12,12 +12,19 @@ def users_exists():
 
 def register(username, password):
     password_hash = generate_password_hash(password)
-    is_first = not users_exists()
-    sql = text(
-        "INSERT INTO users (username, password, is_admin)"
-        "VALUES (:username, :password, :is_admin)"
-    )
-    params = {"username": username, "password": password_hash, "is_admin": is_first}
+    is_first = not users_exist()
+    sql_string = """
+        INSERT INTO
+            users (username, password, is_admin) 
+        VALUES
+            (:username, :password, :is_admin);
+    """
+    sql = text(sql_string)
+    params = {
+        "username": username,
+        "password": password_hash,
+        "is_admin": is_first,
+    }
     try:
         db.session.execute(sql, params)
         db.session.commit()
