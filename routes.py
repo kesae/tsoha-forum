@@ -7,14 +7,14 @@ import posts
 
 
 @app.route("/")
-def index():
+def show_index():
     return render_template(
         "index.html", boards=boards.get_boards(), is_admin=users.is_admin()
     )
 
 
 @app.route("/login", methods=["GET", "POST"])
-def login():
+def log_in():
     if request.method == "GET":
         return render_template("login.html")
     if request.method == "POST":
@@ -27,7 +27,7 @@ def login():
 
 
 @app.route("/logout")
-def logout():
+def log_out():
     users.logout()
     return redirect("/")
 
@@ -49,19 +49,19 @@ def register():
         )
 
 
-@app.route("/edit_boards")
-def edit_boards():
+@app.route("/boards")
+def show_boards():
     if not users.is_admin():
         return render_template("error.html", message="Pääsy estetty"), 403
-    return render_template("edit_boards.html", boards=boards.get_boards())
+    return render_template("boards.html", boards=boards.get_boards())
 
 
-@app.route("/new_board", methods=["GET", "POST"])
-def new_board():
+@app.route("/board/add", methods=["GET", "POST"])
+def add_board():
     if not users.is_admin():
         return render_template("error.html", message="Pääsy estetty"), 403
     if request.method == "GET":
-        return render_template("new_board.html")
+        return render_template("add-board.html")
     if request.method == "POST":
         title = request.form["title"]
         description = request.form["description"]
@@ -70,7 +70,7 @@ def new_board():
 
 
 @app.route("/board/<int:id>")
-def board(id):
+def show_board(id):
     board_data = boards.get_board(id)
     if not board_data:
         return render_template("error.html", message="Sivua ei löydy")
@@ -78,15 +78,15 @@ def board(id):
     return render_template("board.html", board=board_data, topics=board_topics)
 
 
-@app.route("/new_topic/<int:board_id>", methods=["GET", "POST"])
-def new_topic(board_id):
+@app.route("/board/<int:board_id>/topic/add", methods=["GET", "POST"])
+def add_topic(board_id):
     user_id = session.get("user_id", None)
     if not user_id:
         return render_template(
             "error.html", message="Toiminto vaatii kirjautumisen"
         )
     if request.method == "GET":
-        return render_template("new_topic.html", board_id=board_id)
+        return render_template("add-topic.html", board_id=board_id)
     if request.method == "POST":
         board_id = int(request.form["board_id"])
         title = request.form["title"]
@@ -101,7 +101,7 @@ def new_topic(board_id):
 
 
 @app.route("/topic/<int:topic_id>", methods=["GET", "POST"])
-def topic(topic_id):
+def show_topic(topic_id):
     topic_data = topics.get_board_topic(topic_id)
     topic_posts = posts.get_posts(topic_id)
     if request.method == "GET":

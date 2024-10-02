@@ -17,7 +17,7 @@
         <tr>
 
             <td>
-                <a href="{{url_for('topic', topic_id=topic.id)}}">
+                <a href="{{url_for('show_topic', topic_id=topic.id)}}">
                     <b>{{topic.title}}</b>
                     <a>
             </td>
@@ -34,5 +34,5 @@
     </tbody>
 </table>
 <hr>
-<a href="{{url_for('new_topic', board_id=board.id)}}"><b>Luo uusi aihe</b></a>
+<a href="{{url_for('add_topic', board_id=board.id)}}"><b>Luo uusi aihe</b></a>
 {% endblock %}

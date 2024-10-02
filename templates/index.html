@@ -18,7 +18,7 @@
         <tr>
 
             <td>
-                <a href="{{url_for('board', id=board.id)}}">
+                <a href="{{url_for('show_board', id=board.id)}}">
                     <b>{{board.title}}</b>
                     <a>
                         <p>{{board.description}}</p>
@@ -39,6 +39,6 @@
 </table>
 <hr>
 {% if is_admin %}
-<a href="{{url_for('edit_boards')}}">Muokkaa alueita</a>
+<a href="{{url_for('show_boards')}}">Muokkaa alueita</a>
 {% endif %}
 {% endblock %}

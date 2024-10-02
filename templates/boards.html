@@ -4,10 +4,10 @@
 <h2>Muokkaa alueita</h2>
 {% for board in boards %}
 <section>
-<b>{{board.title}}</b>
-<p>{{board.description}}</p>
+    <b>{{board.title}}</b>
+    <p>{{board.description}}</p>
 </section>
 <hr>
 {% endfor %}
-<a href="{{url_for('new_board')}}">Luo uusi alue</a>
+<a href="{{url_for('add_board')}}">Luo uusi alue</a>
 {% endblock %}
