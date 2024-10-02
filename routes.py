@@ -1,9 +1,10 @@
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, abort
 from app import app
 import users
 import boards
 import topics
 import posts
+from utils import check_csrf_token
 
 
 @app.route("/")
@@ -63,6 +64,8 @@ def add_board():
     if request.method == "GET":
         return render_template("add-board.html")
     if request.method == "POST":
+        if not check_csrf_token():
+            abort(403)
         title = request.form["title"]
         description = request.form["description"]
         boards.add_board(title, description)
@@ -88,6 +91,8 @@ def add_topic(board_id):
     if request.method == "GET":
         return render_template("add-topic.html", board_id=board_id)
     if request.method == "POST":
+        if not check_csrf_token():
+            abort(403)
         board_id = int(request.form["board_id"])
         title = request.form["title"]
         content = request.form["content"]
@@ -107,6 +112,8 @@ def show_topic(topic_id):
     if request.method == "GET":
         return render_template("topic.html", posts=topic_posts, topic=topic)
     if request.method == "POST":
+        if not check_csrf_token():
+            abort(403)
         user_id = session.get("user_id")
         if not user_id:
             return render_template(
