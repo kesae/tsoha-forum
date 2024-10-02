@@ -69,13 +69,13 @@ def add_board():
         return redirect("/edit_boards")
 
 
-@app.route("/board/<int:id>")
-def show_board(id):
-    board_data = boards.get_board(id)
-    if not board_data:
+@app.route("/board/<int:board_id>")
+def show_board(board_id):
+    board = boards.get_board(board_id)
+    if not board:
         return render_template("error.html", message="Sivua ei löydy")
-    board_topics = topics.get_topics(id)
-    return render_template("board.html", board=board_data, topics=board_topics)
+    board_topics = topics.get_topics(board_id)
+    return render_template("board.html", board=board, topics=board_topics)
 
 
 @app.route("/board/<int:board_id>/topic/add", methods=["GET", "POST"])
@@ -102,12 +102,10 @@ def add_topic(board_id):
 
 @app.route("/topic/<int:topic_id>", methods=["GET", "POST"])
 def show_topic(topic_id):
-    topic_data = topics.get_board_topic(topic_id)
+    topic = topics.get_board_topic(topic_id)
     topic_posts = posts.get_posts(topic_id)
     if request.method == "GET":
-        return render_template(
-            "topic.html", posts=topic_posts, topic=topic_data
-        )
+        return render_template("topic.html", posts=topic_posts, topic=topic)
     if request.method == "POST":
         user_id = session.get("user_id")
         if not user_id:
