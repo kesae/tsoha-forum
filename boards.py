@@ -43,14 +43,70 @@ def get_boards():
     return result.fetchall()
 
 
-def add_board(title, description):
+def add_board(title, description, access_group):
     sql_string = """
         INSERT INTO
-            boards (title, description) 
+            boards (title, description,access_group) 
         VALUES
-            (:title, :description);
+            (:title, :description, :access_group);
     """
     sql = text(sql_string)
-    params = {"title": title, "description": description}
+    params = {
+        "title": title,
+        "description": description,
+        "access_group": access_group,
+    }
     db.session.execute(sql, params)
     db.session.commit()
+
+
+def user_has_access(user_id, board_id):
+    sql_string = """
+        SELECT
+        (
+            SELECT
+                b.access_group IS NULL 
+            FROM
+                boards b 
+            WHERE
+                b.id = :board_id
+        ) 
+        OR 
+        (
+            SELECT
+                EXISTS
+                (
+                    SELECT
+                        1 
+                    FROM
+                        boards b 
+                        JOIN
+                            memberships m 
+                            ON b.access_group = m.group_id 
+                    WHERE
+                        m.user_id = :user_id 
+                        AND b.id = :board_id
+                )
+        )
+        OR 
+        (
+            COALESCE
+            (
+                (
+                SELECT
+                    u.is_admin 
+                FROM
+                    users u 
+                WHERE
+                    u.id = :user_id
+                ),
+                FALSE
+            )
+        )
+        AS
+            has_access;
+    """
+    sql = text(sql_string)
+    params = {"user_id": user_id, "board_id": board_id}
+    result = db.session.execute(sql, params)
+    return result.fetchone().has_access

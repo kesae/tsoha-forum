@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form action="{{url_for('add_topic', board_id=board_id)}}" method="post">
+<form action="{{url_for('add_board')}}" method="post">
     <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
     <p>
         <label for="title">Otsikko:</label>
@@ -10,6 +10,15 @@
     <p>
         <label for="description">Kuvaus:</label>
         <input type="text" name="description">
+    </p>
+    <p>
+        <label for="access_group">Rajoita ryhmälle:</label>
+        <select name="access_group" id="access_group">
+            <option value="-1">-- Ei rajoitusta --</option>
+            {% for group in access_groups %}
+            <option value="{{group.id}}">{{group.title}}</option>
+            {% endfor %}
+        </select>
     </p>
     <input type="submit" value="Lähetä">
 </form>

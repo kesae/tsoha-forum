@@ -1,10 +1,11 @@
-from flask import redirect, render_template, request, session, abort
+from flask import redirect, render_template, request, session, abort, url_for
 from app import app
 import users
 import boards
 import topics
 import posts
-from utils import check_csrf_token
+import groups
+from utils import check_csrf_token, check_board_access
 
 
 @app.route("/")
@@ -62,18 +63,22 @@ def add_board():
     if not users.is_admin():
         return render_template("error.html", message="Pääsy estetty"), 403
     if request.method == "GET":
-        return render_template("add-board.html")
+        access_groups = groups.get_groups()
+        return render_template("add-board.html", access_groups=access_groups)
     if request.method == "POST":
         if not check_csrf_token():
             abort(403)
         title = request.form["title"]
         description = request.form["description"]
-        boards.add_board(title, description)
-        return redirect("/edit_boards")
+        access_group = request.form["access_group"]
+        boards.add_board(title, description, access_group)
+        return redirect(url_for("show_boards"))
 
 
 @app.route("/board/<int:board_id>")
 def show_board(board_id):
+    if not check_board_access(board_id):
+        abort(403)
     board = boards.get_board(board_id)
     if not board:
         return render_template("error.html", message="Sivua ei löydy")
@@ -83,6 +88,8 @@ def show_board(board_id):
 
 @app.route("/board/<int:board_id>/topic/add", methods=["GET", "POST"])
 def add_topic(board_id):
+    if not check_board_access(board_id):
+        abort(403)
     user_id = session.get("user_id", None)
     if not user_id:
         return render_template(
@@ -122,3 +129,31 @@ def show_topic(topic_id):
         content = request.form["content"]
         posts.add_post(user_id, content, topic_id)
         return redirect(f"/topic/{topic_id}")
+
+
+@app.route("/groups")
+def show_groups():
+    return render_template("groups.html", groups=groups.get_groups())
+
+
+@app.route("/group/<int:group_id>", methods=["GET", "POST"])
+def show_group(group_id):
+    group = groups.get_group(group_id)
+    if not group:
+        return render_template("error.html", message="Sivua ei löydy")
+    return render_template("group.html", group=group)
+
+
+@app.route("/group/add", methods=["GET", "POST"])
+def add_group():
+    if not users.is_admin():
+        return render_template("error.html", message="Pääsy estetty"), 403
+    if request.method == "GET":
+        return render_template("add-group.html")
+    if request.method == "POST":
+        if not check_csrf_token():
+            abort(403)
+        title = request.form["title"]
+        description = request.form["description"]
+        groups.add_group(title, description)
+        return redirect(url_for("show_groups"))

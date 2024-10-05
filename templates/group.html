@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<article>
+    <h2>Käyttäjäryhmä</h2>
+    <p>
+        <b>Nimi: </b>{{group.title}}
+    </p>
+    <p>
+        <b>Kuvaus: </b>{{group.description}}
+    </p>
+    <p>
+        <b>Jäsenmäärä: </b>{{group.member_count}}
+    </p>
+</article>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Lisää ryhmä</h2>
+<form action="{{url_for('add_group')}}" method="post">
+    <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
+    <p>
+        <label for="title">Otsikko:</label>
+        <input type="text" id="otsikko" name="title">
+    </p>
+    <p>
+        <label for="description">Kuvaus:</label>
+        <input type="text" id="description" name="description">
+    </p>
+    <input type="submit" value="Lähetä">
+</form>
+{% endblock %}

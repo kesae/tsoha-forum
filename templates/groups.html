@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Käyttäjäryhmät</h2>
+{% if not groups %}
+<p>Ei käyttäjäryhmiä</p>
+{% else %}
+<table>
+    <thead>
+        <tr>
+        <tr>
+            <th scope="col">Ryhmä</th>
+            <th scope="col">Kuvaus</th>
+            <th scope="col">Jäseniä</th>
+        </tr>
+        </tr>
+    </thead>
+    <tbody>
+        {% for group in groups %}
+        <tr>
+
+            <td>
+                <a href="{{url_for('show_group', group_id=group.id)}}">
+                    <b>{{group.title}}</b>
+                </a>
+            </td>
+            <td>
+                <p>{{group.description}}</p>
+            </td>
+            <td>{{group.member_count}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr>
+{% endif %}
+<a href="{{url_for('add_group')}}">Luo uusi ryhmä</a>
+{% endblock %}

@@ -7,7 +7,10 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS boards (
     id SERIAL PRIMARY KEY,
     title TEXT,
-    description TEXT
+    description TEXT,
+    access_group INTEGER
+        REFERENCES groups (id)
+        ON DELETE SET NULL;
 );
 CREATE TABLE IF NOT EXISTS topics (
     id SERIAL PRIMARY KEY,
@@ -30,4 +33,19 @@ CREATE TABLE IF NOT EXISTS posts (
         ON DELETE CASCADE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     edited_at TIMESTAMPTZ
+);
+CREATE TABLE IF NOT EXISTS groups (
+    id SERIAL PRIMARY KEY,
+    title TEXT UNIQUE,
+    description TEXT
+);
+CREATE TABLE IF NOT EXISTS memberships (
+    group_id INTEGER NOT NULL
+        REFERENCES groups (id)
+        ON DELETE CASCADE,
+    user_id INTEGER NOT NULL
+        REFERENCES users (id)
+        ON DELETE CASCADE,
+    CONSTRAINT primary_key
+        PRIMARY KEY (group_id, user_id)
 );
