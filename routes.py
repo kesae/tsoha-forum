@@ -25,6 +25,15 @@ def load_session():
         g.user = users.get_user(session["user_id"])
 
 
+@app.before_request
+def test_csrf_token():
+    if "user_id" not in session:
+        return
+    if request.method == "POST":
+        if not check_csrf_token():
+            abort(403)
+
+
 @app.route("/")
 def show_index():
     return render_template(
@@ -101,8 +110,6 @@ def add_board():
         access_groups = groups.get_groups()
         return render_template("add-board.html", access_groups=access_groups)
     if request.method == "POST":
-        if not check_csrf_token():
-            abort(403)
         title = request.form["title"]
         description = request.form["description"]
         access_group = request.form["access_group"]
@@ -135,8 +142,6 @@ def add_topic(board_id):
     if request.method == "GET":
         return render_template("add-topic.html", board_id=board_id)
     if request.method == "POST":
-        if not check_csrf_token():
-            abort(403)
         board_id = int(request.form["board_id"])
         title = request.form["title"]
         content = request.form["content"]
@@ -156,8 +161,6 @@ def show_topic(topic_id):
     if request.method == "GET":
         return render_template("topic.html", posts=topic_posts, topic=topic)
     if request.method == "POST":
-        if not check_csrf_token():
-            abort(403)
         user_id = session.get("user_id")
         if not user_id:
             return render_template(
@@ -188,8 +191,6 @@ def add_group():
     if request.method == "GET":
         return render_template("add-group.html")
     if request.method == "POST":
-        if not check_csrf_token():
-            abort(403)
         title = request.form["title"]
         description = request.form["description"]
         groups.add_group(title, description)
@@ -198,8 +199,6 @@ def add_group():
 
 @app.route("/group/<int:group_id>/join/<int:user_id>", methods=["POST"])
 def add_membership(group_id, user_id):
-    if not check_csrf_token():
-        abort(403)
     if not g.user or not g.user.is_admin:
         abort(403)
     memberships.add_membership(group_id, user_id)
@@ -208,8 +207,6 @@ def add_membership(group_id, user_id):
 
 @app.route("/group/<int:group_id>/remove/<int:user_id>", methods=["POST"])
 def remove_membership(group_id, user_id):
-    if not check_csrf_token():
-        abort(403)
     if not g.user or not g.user.is_admin:
         abort(403)
     memberships.remove_membership(group_id, user_id)
