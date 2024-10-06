@@ -19,3 +19,8 @@ def get_admin_error():
 def get_missing_error():
     message = "Sivua ei löydy"
     return render_template("error.html", message=message), 404
+
+
+def get_password_error():
+    message = "Väärä salasana"
+    return render_template("error.html", message=message), 401

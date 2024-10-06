@@ -14,7 +14,7 @@ import topics
 import posts
 import groups
 import memberships
-from utils import check_csrf_token, check_board_access
+from utils import check_csrf_token, check_board_access, check_password
 import pages
 
 
@@ -94,6 +94,27 @@ def show_user(user_id):
         groups=user_groups,
         joinable_groups=joinable_groups,
     )
+
+
+@app.route("/user/<int:user_id>/remove", methods=["GET", "POST"])
+def remove_user(user_id):
+    if not g.user:
+        return pages.get_login_error()
+    if not (g.user.id == user_id or g.user.is_admin):
+        return pages.get_access_error()
+    if request.method == "GET":
+        user = users.get_user(user_id)
+        if not user:
+            return pages.get_missing_error()
+        return render_template("remove-user.html", user=user)
+    if request.method == "POST":
+        password = request.form["password"]
+        if not check_password(g.user.id, password):
+            return pages.get_password_error()
+        users.remove_user(user_id)
+        if user_id == g.user.id:
+            return redirect(url_for("log_out"))
+        return redirect(url_for("show_users"))
 
 
 @app.route("/boards")

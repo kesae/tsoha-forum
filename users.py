@@ -60,6 +60,20 @@ def get_user(user_id):
     return result.fetchone()
 
 
+def get_password_hash(user_id):
+    sql_string = """
+        SELECT
+            password
+        FROM
+            users
+        WHERE
+            id = :id;
+    """
+    sql = text(sql_string)
+    result = db.session.execute(sql, {"id": user_id})
+    return result.fetchone()
+
+
 def get_users():
     sql_string = """
         SELECT
@@ -70,6 +84,18 @@ def get_users():
     sql = text(sql_string)
     result = db.session.execute(sql)
     return result.fetchall()
+
+
+def remove_user(user_id):
+    sql_string = """
+        DELETE FROM
+            users
+        WHERE
+            id = :id;
+    """
+    sql = text(sql_string)
+    db.session.execute(sql, {"id": user_id})
+    db.session.commit()
 
 
 def is_admin():

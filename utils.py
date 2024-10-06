@@ -1,6 +1,8 @@
 import secrets
 from flask import request, session
+from werkzeug.security import check_password_hash
 from boards import user_has_access
+import users
 
 
 def set_csrf_token():
@@ -16,3 +18,10 @@ def check_csrf_token():
 def check_board_access(board_id):
     user_id = session.get("user_id", 0)
     return user_has_access(user_id, board_id)
+
+
+def check_password(user_id, password):
+    pw_hash = users.get_password_hash(user_id).password
+    if not pw_hash:
+        return False
+    return check_password_hash(pw_hash, password)
