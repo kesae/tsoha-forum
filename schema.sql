@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 CREATE TABLE IF NOT EXISTS boards (
     id SERIAL PRIMARY KEY,
-    title TEXT,
+    title TEXT UNIQUE,
     description TEXT,
     access_group INTEGER
         REFERENCES groups (id)

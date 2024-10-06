@@ -1,4 +1,4 @@
-from sqlalchemy import text
+from sqlalchemy import text, exc
 from app import db
 
 
@@ -56,8 +56,12 @@ def add_board(title, description, access_group):
         "description": description,
         "access_group": access_group,
     }
-    db.session.execute(sql, params)
-    db.session.commit()
+    try:
+        db.session.execute(sql, params)
+        db.session.commit()
+    except exc.IntegrityError:
+        return False
+    return True
 
 
 def user_has_access(user_id, board_id):

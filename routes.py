@@ -106,8 +106,10 @@ def add_board():
         title = request.form["title"]
         description = request.form["description"]
         access_group = request.form["access_group"]
-        boards.add_board(title, description, access_group)
-        return redirect(url_for("show_boards"))
+        if boards.add_board(title, description, access_group):
+            return redirect(url_for("show_boards"))
+        message = "Samanniminen alue on jo olemassa"
+        return render_template("error.html", message=message), 409
 
 
 @app.route("/board/<int:board_id>")
