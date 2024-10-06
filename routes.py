@@ -222,6 +222,23 @@ def remove_topic(topic_id):
         return redirect(url_for("show_index"))
 
 
+@app.route("/post/<int:post_id>/edit", methods=["GET", "POST"])
+def edit_post(post_id):
+    if not g.user:
+        return pages.get_login_error()
+    post = posts.get_post(post_id)
+    if not post:
+        return pages.get_missing_error()
+    if not (g.user.id == post.user_id or g.user.is_admin):
+        return pages.get_access_error()
+    if request.method == "GET":
+        return render_template("edit-post.html", post=post)
+    if request.method == "POST":
+        content = request.form["content"]
+        posts.edit_post(post_id, content)
+        return redirect(url_for("show_topic", topic_id=post.topic_id))
+
+
 @app.route("/groups")
 def show_groups():
     if not (g.user and g.user.is_admin):

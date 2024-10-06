@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<article>
+    <h2>Muokkaa viestiä</h2>
+    <form action="/post/{{post.id}}/edit" method="post">
+        <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
+        <p>
+            <label for="content">Muokkaa tekstiä:</label>
+            <textarea type="text" id="content" name="content">{{post.content}}</textarea>
+        </p>
+        <p>
+            <input type="submit" value="Lähetä">
+        </p>
+    </form>
+</article>
+{% endblock %}
