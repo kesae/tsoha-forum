@@ -6,6 +6,7 @@ def get_board_topic(topic_id):
     sql_string = """
         SELECT
             t.id AS id,
+            t.user_id AS user_id,
             t.title AS title,
             board_id,
             b.title AS board_title 
@@ -26,6 +27,7 @@ def get_topics(board_id):
     sql_string = """
         SELECT
             t.id id,
+            t.user_id user_id,
             t.title title,
             COUNT(p.id) post_count,
             MAX(p.created_at) latest_post_at 
@@ -46,18 +48,16 @@ def get_topics(board_id):
     return result.fetchall()
 
 
-def add_topic(title, board_id):
+def add_topic(user_id, title, board_id):
     sql_string = """
         INSERT INTO
-            topics (title, board_id) 
+            topics (user_id, title, board_id) 
         VALUES
-            (
-                :title, :board_id
-            )
+            (:user_id, :title, :board_id)
         RETURNING id;
     """
     sql = text(sql_string)
-    params = {"title": title, "board_id": board_id}
+    params = {"user_id": user_id, "title": title, "board_id": board_id}
     result = db.session.execute(sql, params)
     db.session.commit()
     return result.fetchone()[0]

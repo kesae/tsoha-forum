@@ -166,7 +166,7 @@ def add_topic(board_id):
         board_id = int(request.form["board_id"])
         title = request.form["title"]
         content = request.form["content"]
-        topic_id = topics.add_topic(title, board_id)
+        topic_id = topics.add_topic(user_id, title, board_id)
         if topic_id:
             posts.add_post(user_id, content, topic_id)
             return redirect(f"/board/{board_id}")
