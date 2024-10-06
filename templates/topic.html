@@ -16,12 +16,13 @@
 </article>
 {% endfor %}
 {% if session.user_id %}
+<h3>Lisää uusi viesti</h3>
 <form action="/topic/{{topic.id}}" method="post">
     <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
     <input type="hidden" name="topic_id" id="topic_id" value="{{topic_id}}">
     <p>
         <label for="content">Viesti:</label>
-        <input type="text" name="content">
+        <textarea type="text" id="content" name="content"></textarea>
     </p>
     <input type="submit" value="Lähetä">
 </form>
