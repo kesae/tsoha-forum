@@ -35,7 +35,6 @@ Sovellus sisältää seuraavat toiminnallisuudet:
 - Käyttäjä voi kirjoittaa uuden viestin olemassa olevaan ketjuun.
 - Käyttäjä voi muokata luomansa ketjun otsikkoa sekä lähettämänsä viestin sisältöä.
 - Käyttäjä voi myös poistaa itse luomansa ketjun tai viestin.
-- Käyttäjä voi etsiä kaikki viestit, joiden osana on annettu sana.
 - Ylläpitäjä voi poistaa minkä tahansa ketjun tai viestin.
 - Ylläpitäjä voi lisätä keskustelualueita.
 - Ylläpitäjä voi luoda salaisen alueen ja määrittää, keillä käyttäjillä on pääsy alueelle.
