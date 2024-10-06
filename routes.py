@@ -224,11 +224,15 @@ def remove_topic(topic_id):
 
 @app.route("/groups")
 def show_groups():
+    if not (g.user and g.user.is_admin):
+        return pages.get_admin_error()
     return render_template("groups.html", groups=groups.get_groups())
 
 
 @app.route("/group/<int:group_id>", methods=["GET", "POST"])
 def show_group(group_id):
+    if not (g.user and g.user.is_admin):
+        return pages.get_admin_error()
     group = groups.get_group(group_id)
     if not group:
         return pages.get_missing_error()

@@ -13,8 +13,11 @@
     </header>
     <nav>
         <a href="{{url_for('show_index')}}">Etusivu</a>
-        {% if g.user %}
         <a href="{{url_for('show_users')}}">Käyttäjät</a>
+        {% if g.user and g.user.is_admin %}
+        <a href="{{url_for('show_groups')}}">Ryhmät</a>
+        {% endif %}
+        {% if g.user %}
         <a href="{{url_for('show_user', user_id=g.user.id)}}">{{g.user.username}}</a>
         <a href="{{url_for('log_out')}}">Kirjaudu ulos</a>
         {% else %}
