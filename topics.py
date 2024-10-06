@@ -76,3 +76,15 @@ def edit_title(topic_id, title):
     params = {"title": title, "id": topic_id}
     db.session.execute(sql, params)
     db.session.commit()
+
+
+def remove_topic(topic_id):
+    sql_string = """
+        DELETE FROM
+            topics
+        WHERE
+            id = :id;
+    """
+    sql = text(sql_string)
+    db.session.execute(sql, {"id": topic_id})
+    db.session.commit()

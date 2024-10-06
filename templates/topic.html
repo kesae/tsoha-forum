@@ -5,6 +5,7 @@
 <h2>{{topic.title}}</h2>
 {% if g.user and (g.user.id == topic.user_id or g.user.is_admin) %}
 <a href="{{url_for('edit_topic',topic_id=topic.id)}}">Muokkaa otsikkoa</a>
+<a href="{{url_for('remove_topic',topic_id=topic.id)}}">Poista ketju</a>
 {% endif %}
 {% for post in posts %}
 <p>{{post.content}}</p>

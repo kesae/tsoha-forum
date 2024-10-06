@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<article>
+    <h2>Poista aihe: {{topic.title}}</h2>
+    <form action="/topic/{{topic.id}}/remove" method="post">
+        <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
+        <p>
+            <label for="password">Vahvista salasanalla:</label>
+            <input type="password" id="password" name="password">
+        </p>
+        <input type="submit" value="Poista">
+    </form>
+</article>
+{% endblock %}

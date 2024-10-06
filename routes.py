@@ -205,6 +205,23 @@ def edit_topic(topic_id):
         return redirect(url_for("show_topic", topic_id=topic_id))
 
 
+@app.route("/topic/<int:topic_id>/remove", methods=["GET", "POST"])
+def remove_topic(topic_id):
+    if not g.user:
+        return pages.get_login_error()
+    topic = topics.get_board_topic(topic_id)
+    if not (g.user.id == topic.user_id or g.user.is_admin):
+        return pages.get_access_error()
+    if request.method == "GET":
+        return render_template("remove-topic.html", topic=topic)
+    if request.method == "POST":
+        password = request.form["password"]
+        if not check_password(g.user.id, password):
+            return pages.get_password_error()
+        topics.remove_topic(topic_id)
+        return redirect(url_for("show_index"))
+
+
 @app.route("/groups")
 def show_groups():
     return render_template("groups.html", groups=groups.get_groups())
