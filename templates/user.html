@@ -5,6 +5,8 @@
 {% for group in groups %}
 {% endfor %}
 
+{% if g.user and (g.user.id == user.id or g.user.is_admin) %}
+{% if groups %}
 <section>
     <h3>Käyttäjän ryhmät</h3>
     <ul>
@@ -24,7 +26,10 @@
         {% endfor %}
     </ul>
 </section>
+{% endif %}
+{% endif %}
 {% if g.user and g.user.is_admin %}
+{% if joinable_groups %}
 <section>
     <h3>Muut ryhmät</h3>
     <ul>
@@ -37,9 +42,10 @@
                     <input type="submit" value="Liitä ryhmään">
                 </p>
             </form>
+            {% endfor %}
         </li>
     </ul>
 </section>
-{% endfor %}
+{% endif %}
 {% endif %}
 {% endblock %}
