@@ -61,3 +61,18 @@ def add_topic(user_id, title, board_id):
     result = db.session.execute(sql, params)
     db.session.commit()
     return result.fetchone()[0]
+
+
+def edit_title(topic_id, title):
+    sql_string = """
+        UPDATE
+            topics
+        SET
+            title = :title
+        WHERE
+            id = :id;
+    """
+    sql = text(sql_string)
+    params = {"title": title, "id": topic_id}
+    db.session.execute(sql, params)
+    db.session.commit()

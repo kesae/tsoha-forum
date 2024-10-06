@@ -190,6 +190,21 @@ def show_topic(topic_id):
         return redirect(f"/topic/{topic_id}")
 
 
+@app.route("/topic/<int:topic_id>/edit", methods=["GET", "POST"])
+def edit_topic(topic_id):
+    if not g.user:
+        return pages.get_login_error()
+    topic = topics.get_board_topic(topic_id)
+    if not (g.user.id == topic.user_id or g.user.is_admin):
+        return pages.get_access_error()
+    if request.method == "GET":
+        return render_template("edit-topic.html", topic=topic)
+    if request.method == "POST":
+        title = request.form["title"]
+        topics.edit_title(topic_id, title)
+        return redirect(url_for("show_topic", topic_id=topic_id))
+
+
 @app.route("/groups")
 def show_groups():
     return render_template("groups.html", groups=groups.get_groups())
