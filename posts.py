@@ -5,13 +5,17 @@ from app import db
 def get_posts(topic_id):
     sql_string = """
         SELECT
-            id,
+            p.id id,
             user_id,
             content,
             created_at,
-            edited_at 
+            edited_at,
+            username
         FROM
-            posts 
+            posts p
+        JOIN
+            users u
+            ON u.id = p.user_id
         WHERE
             topic_id = :topic_id;
     """
