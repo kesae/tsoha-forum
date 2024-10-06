@@ -45,6 +45,33 @@ def login(username, password):
     return False
 
 
+def get_user(user_id):
+    sql_string = """
+        SELECT
+            id, username, is_admin
+        FROM
+            users
+        WHERE
+            id = :id;
+    """
+    sql = text(sql_string)
+    params = {"id": user_id}
+    result = db.session.execute(sql, params)
+    return result.fetchone()
+
+
+def get_users():
+    sql_string = """
+        SELECT
+            id, username, is_admin
+        FROM
+            users
+    """
+    sql = text(sql_string)
+    result = db.session.execute(sql)
+    return result.fetchall()
+
+
 def is_admin():
     user_id = session.get("user_id", None)
     if not id:

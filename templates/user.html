@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Käyttäjä {{user.username}}</h2>
+{% for group in groups %}
+{% endfor %}
+
+<section>
+    <h3>Käyttäjän ryhmät</h3>
+    <ul>
+        {% for group in groups %}
+        <li>
+            <b>{{group.title}}: </b>
+            {{group.description}}
+            {% if g.user and g.user.is_admin %}
+            <form action="{{url_for('remove_membership',group_id=group.id, user_id=g.user.id)}}" method="post">
+                <p>
+                    <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
+                    <input type="submit" value="Poista ryhmästä">
+                </p>
+            </form>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+</section>
+{% if g.user and g.user.is_admin %}
+<section>
+    <h3>Muut ryhmät</h3>
+    <ul>
+        <li>
+            {% for group in joinable_groups %}
+            <b>{{group.title}}: </b>{{group.description}}
+            <form action="{{url_for('add_membership',group_id=group.id, user_id=g.user.id)}}" method="post">
+                <p>
+                    <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
+                    <input type="submit" value="Liitä ryhmään">
+                </p>
+            </form>
+        </li>
+    </ul>
+</section>
+{% endfor %}
+{% endif %}
+{% endblock %}

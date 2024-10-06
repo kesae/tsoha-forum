@@ -13,7 +13,9 @@
     </header>
     <nav>
         <a href="{{url_for('show_index')}}">Etusivu</a>
-        {% if session.user_id %}
+        {% if g.user %}
+        <a href="{{url_for('show_users')}}">Käyttäjät</a>
+        <a href="{{url_for('show_user', user_id=g.user.id)}}">{{g.user.username}}</a>
         <a href="{{url_for('log_out')}}">Kirjaudu ulos</a>
         {% else %}
         <a href="{{url_for('log_in')}}">Kirjaudu sisään</a>

@@ -1,11 +1,28 @@
-from flask import redirect, render_template, request, session, abort, url_for
+from flask import (
+    redirect,
+    render_template,
+    request,
+    session,
+    abort,
+    url_for,
+    g,
+)
 from app import app
 import users
 import boards
 import topics
 import posts
 import groups
+import memberships
 from utils import check_csrf_token, check_board_access
+
+
+@app.before_request
+def load_session():
+    print("load")
+    g.user = None
+    if "user_id" in session:
+        g.user = users.get_user(session["user_id"])
 
 
 @app.route("/")
@@ -49,6 +66,24 @@ def register():
         return render_template(
             "error.html", message="Rekisteröinti ei onnistunut"
         )
+
+
+@app.route("/users")
+def show_users():
+    return render_template("users.html", users=users.get_users())
+
+
+@app.route("/user/<int:user_id>")
+def show_user(user_id):
+    user = users.get_user(user_id)
+    user_groups = groups.get_user_groups(user_id)
+    joinable_groups = groups.get_joinable_groups(user_id)
+    return render_template(
+        "user.html",
+        user=user,
+        groups=user_groups,
+        joinable_groups=joinable_groups,
+    )
 
 
 @app.route("/boards")
@@ -157,3 +192,23 @@ def add_group():
         description = request.form["description"]
         groups.add_group(title, description)
         return redirect(url_for("show_groups"))
+
+
+@app.route("/group/<int:group_id>/join/<int:user_id>", methods=["POST"])
+def add_membership(group_id, user_id):
+    if not check_csrf_token():
+        abort(403)
+    if not g.user or not g.user.is_admin:
+        abort(403)
+    memberships.add_membership(group_id, user_id)
+    return redirect(url_for("show_user", user_id=user_id))
+
+
+@app.route("/group/<int:group_id>/remove/<int:user_id>", methods=["POST"])
+def remove_membership(group_id, user_id):
+    if not check_csrf_token():
+        abort(403)
+    if not g.user or not g.user.is_admin:
+        abort(403)
+    memberships.remove_membership(group_id, user_id)
+    return redirect(url_for("show_user", user_id=user_id))
