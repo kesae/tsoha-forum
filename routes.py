@@ -112,7 +112,12 @@ def add_board():
     if request.method == "POST":
         title = request.form["title"]
         description = request.form["description"]
-        access_group = request.form["access_group"]
+        access_string = request.form["access_group"]
+        try:
+            access_group = int(access_string)
+        except ValueError:
+            abort(403)
+        access_group = None if access_group < 1 else access_group
         if boards.add_board(title, description, access_group):
             return redirect(url_for("show_boards"))
         message = "Samanniminen alue on jo olemassa"
