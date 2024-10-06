@@ -98,17 +98,5 @@ def remove_user(user_id):
     db.session.commit()
 
 
-def is_admin():
-    user_id = session.get("user_id", None)
-    if not id:
-        return False
-    sql = text("SELECT is_admin FROM users WHERE id=:id")
-    result = db.session.execute(sql, {"id": user_id})
-    value = result.fetchone()
-    if value:
-        return value
-    return False
-
-
 def logout():
     del session["user_id"]

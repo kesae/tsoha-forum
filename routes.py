@@ -37,9 +37,7 @@ def test_csrf_token():
 
 @app.route("/")
 def show_index():
-    return render_template(
-        "index.html", boards=boards.get_boards(), is_admin=users.is_admin()
-    )
+    return render_template("index.html", boards=boards.get_boards())
 
 
 @app.route("/login", methods=["GET", "POST"])
