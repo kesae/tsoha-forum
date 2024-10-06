@@ -24,3 +24,8 @@ def get_missing_error():
 def get_password_error():
     message = "Väärä salasana"
     return render_template("error.html", message=message), 401
+
+
+def get_reserved_username_error():
+    message = "Käyttäjänimi on jo varattu"
+    return render_template("error.html", message=message), 409

@@ -71,9 +71,7 @@ def register():
             return render_template("error.html", message="Salasanat eroavat")
         if users.register(username, password1):
             return redirect("/")
-        return render_template(
-            "error.html", message="Rekisteröinti ei onnistunut"
-        )
+        return pages.get_reserved_username_error()
 
 
 @app.route("/users")
