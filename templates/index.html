@@ -37,7 +37,6 @@
         {% endfor %}
     </tbody>
 </table>
-<hr>
 {% if g.user and g.user.is_admin %}
 <a href="{{url_for('show_boards')}}">Muokkaa alueita</a>
 {% endif %}

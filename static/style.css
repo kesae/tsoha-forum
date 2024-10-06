@@ -1,3 +1,8 @@
+body {
+    width: 75%;
+    margin: auto;
+}
+
 .topic {
     border: 1px solid gray;
     padding: 0.25em;
@@ -11,16 +16,11 @@
     border: 1px solid gray;
 }
 
-body footer {
-    border-top: 2px solid gray;
-}
-
 table, th, td {
     border: 1px solid gray;
 }
 
 table {
-    width: 80%;
-    margin: auto;
+    width: 100%;
     border-collapse: collapse;
 }
