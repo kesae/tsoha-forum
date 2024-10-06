@@ -66,3 +66,15 @@ def edit_post(post_id, content):
     params = {"id": post_id, "content": content}
     db.session.execute(sql, params)
     db.session.commit()
+
+
+def remove_post(post_id):
+    sql_string = """
+        DELETE FROM
+            posts
+        WHERE
+            id = :id;
+    """
+    sql = text(sql_string)
+    db.session.execute(sql, {"id": post_id})
+    db.session.commit()
