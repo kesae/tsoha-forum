@@ -1,0 +1,26 @@
+.topic {
+    border: 1px solid gray;
+    padding: 0.25em;
+}
+
+.post {
+    border: 1px solid gray;
+}
+
+.post header {
+    border: 1px solid gray;
+}
+
+body footer {
+    border-top: 2px solid gray;
+}
+
+table, th, td {
+    border: 1px solid gray;
+}
+
+table {
+    width: 80%;
+    margin: auto;
+    border-collapse: collapse;
+}
