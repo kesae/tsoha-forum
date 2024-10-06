@@ -15,6 +15,7 @@ import posts
 import groups
 import memberships
 from utils import check_csrf_token, check_board_access
+import pages
 
 
 @app.before_request
@@ -97,15 +98,15 @@ def show_user(user_id):
 
 @app.route("/boards")
 def show_boards():
-    if not users.is_admin():
-        return render_template("error.html", message="Pääsy estetty"), 403
+    if not (g.user and g.user.is_admin):
+        return pages.get_admin_error()
     return render_template("boards.html", boards=boards.get_boards())
 
 
 @app.route("/board/add", methods=["GET", "POST"])
 def add_board():
-    if not users.is_admin():
-        return render_template("error.html", message="Pääsy estetty"), 403
+    if not (g.user and g.user.is_admin):
+        return pages.get_admin_error()
     if request.method == "GET":
         access_groups = groups.get_groups()
         return render_template("add-board.html", access_groups=access_groups)
@@ -127,10 +128,10 @@ def add_board():
 @app.route("/board/<int:board_id>")
 def show_board(board_id):
     if not check_board_access(board_id):
-        abort(403)
+        return pages.get_access_error()
     board = boards.get_board(board_id)
     if not board:
-        return render_template("error.html", message="Sivua ei löydy")
+        return pages.get_missing_error()
     board_topics = topics.get_topics(board_id)
     return render_template("board.html", board=board, topics=board_topics)
 
@@ -138,12 +139,10 @@ def show_board(board_id):
 @app.route("/board/<int:board_id>/topic/add", methods=["GET", "POST"])
 def add_topic(board_id):
     if not check_board_access(board_id):
-        abort(403)
+        return pages.get_access_error()
     user_id = session.get("user_id", None)
     if not user_id:
-        return render_template(
-            "error.html", message="Toiminto vaatii kirjautumisen"
-        )
+        return pages.get_login_error()
     if request.method == "GET":
         return render_template("add-topic.html", board_id=board_id)
     if request.method == "POST":
@@ -168,9 +167,7 @@ def show_topic(topic_id):
     if request.method == "POST":
         user_id = session.get("user_id")
         if not user_id:
-            return render_template(
-                "error.html", message="Toiminto vaatii kirjautumisen"
-            )
+            return pages.get_login_error()
         content = request.form["content"]
         posts.add_post(user_id, content, topic_id)
         return redirect(f"/topic/{topic_id}")
@@ -185,14 +182,14 @@ def show_groups():
 def show_group(group_id):
     group = groups.get_group(group_id)
     if not group:
-        return render_template("error.html", message="Sivua ei löydy")
+        return pages.get_missing_error()
     return render_template("group.html", group=group)
 
 
 @app.route("/group/add", methods=["GET", "POST"])
 def add_group():
-    if not users.is_admin():
-        return render_template("error.html", message="Pääsy estetty"), 403
+    if not (g.user and g.user.is_admin):
+        return pages.get_admin_error()
     if request.method == "GET":
         return render_template("add-group.html")
     if request.method == "POST":
@@ -204,15 +201,15 @@ def add_group():
 
 @app.route("/group/<int:group_id>/join/<int:user_id>", methods=["POST"])
 def add_membership(group_id, user_id):
-    if not g.user or not g.user.is_admin:
-        abort(403)
+    if not (g.user and g.user.is_admin):
+        return pages.get_admin_error()
     memberships.add_membership(group_id, user_id)
     return redirect(url_for("show_user", user_id=user_id))
 
 
 @app.route("/group/<int:group_id>/remove/<int:user_id>", methods=["POST"])
 def remove_membership(group_id, user_id):
-    if not g.user or not g.user.is_admin:
-        abort(403)
+    if not (g.user and g.user.is_admin):
+        return pages.get_admin_error()
     memberships.remove_membership(group_id, user_id)
     return redirect(url_for("show_user", user_id=user_id))
