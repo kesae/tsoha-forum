@@ -7,6 +7,7 @@ from flask import (
     url_for,
     g,
 )
+from markupsafe import escape_silent, Markup
 from app import app
 import users
 import boards
@@ -16,6 +17,14 @@ import groups
 import memberships
 from utils import check_csrf_token, check_board_access, check_password
 import pages
+
+
+@app.template_filter("make_safe_html")
+def make_safe_html(text):
+    safe_text = str(escape_silent(text))
+    safe_html = safe_text.replace("\r\n", "<br/>").replace("\n", "<br/>")
+    html_marked_safe = Markup(safe_html)
+    return html_marked_safe
 
 
 @app.before_request

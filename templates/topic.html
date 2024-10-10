@@ -18,7 +18,7 @@
         (Muokattu: {{ post.edited_at.strftime('%d.%m.%Y %H:%M') }})
         {% endif %}
     </header>
-    <p>{{post.content}}</p>
+    <p>{{post.content | make_safe_html }} </p>
     {% if g.user and (g.user.id == post.user_id or g.user.is_admin) %}
     <a href="{{url_for('edit_post', post_id = post.id)}}">Muokkaa viestiä</a>
     <form action="/post/{{post.id}}/remove" method="post">
