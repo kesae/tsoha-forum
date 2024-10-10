@@ -92,21 +92,6 @@ def user_has_access(user_id, board_id):
                         AND b.id = :board_id
                 )
         )
-        OR 
-        (
-            COALESCE
-            (
-                (
-                SELECT
-                    u.is_admin 
-                FROM
-                    users u 
-                WHERE
-                    u.id = :user_id
-                ),
-                FALSE
-            )
-        )
         AS
             has_access;
     """
