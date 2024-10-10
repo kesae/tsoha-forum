@@ -86,7 +86,7 @@ def add_board(title, description, access_group):
     return True
 
 
-def user_has_access(user_id, board_id):
+def nonadmin_has_access(user_id, board_id):
     sql_string = """
         SELECT
         (
@@ -97,22 +97,18 @@ def user_has_access(user_id, board_id):
             WHERE
                 b.id = :board_id
         ) 
-        OR 
+        OR EXISTS
         (
             SELECT
-                EXISTS
-                (
-                    SELECT
-                        1 
-                    FROM
-                        boards b 
-                        JOIN
-                            memberships m 
-                            ON b.access_group = m.group_id 
-                    WHERE
-                        m.user_id = :user_id 
-                        AND b.id = :board_id
-                )
+                1 
+            FROM
+                boards b 
+                JOIN
+                    memberships m 
+                    ON b.access_group = m.group_id 
+            WHERE
+                m.user_id = :user_id 
+                AND b.id = :board_id
         )
         AS
             has_access;
