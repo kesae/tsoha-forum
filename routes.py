@@ -15,7 +15,12 @@ import topics
 import posts
 import groups
 import memberships
-from utils import check_csrf_token, check_board_access, check_password
+from utils import (
+    check_csrf_token,
+    check_board_access,
+    check_password,
+    get_boards,
+)
 import pages
 
 
@@ -46,7 +51,7 @@ def test_csrf_token():
 
 @app.route("/")
 def show_index():
-    return render_template("index.html", boards=boards.get_boards())
+    return render_template("index.html", boards=get_boards())
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -126,7 +131,7 @@ def remove_user(user_id):
 def show_boards():
     if not (g.user and g.user.is_admin):
         return pages.get_admin_error()
-    return render_template("boards.html", boards=boards.get_boards())
+    return render_template("boards.html", boards=get_boards())
 
 
 @app.route("/board/add", methods=["GET", "POST"])

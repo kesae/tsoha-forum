@@ -18,28 +18,50 @@ def get_board(board_id):
     return result.fetchone()
 
 
-def get_boards():
+def get_user_boards(user_id):
     sql_string = """
         SELECT
             b.id id,
             b.title title,
             b.description description,
+            access_group,
+            g.title access_title,
             COUNT(DISTINCT t.id) topic_count,
-            COUNT(p.id) post_count,
+            COUNT(DISTINCT p.id) post_count,
             MAX(created_at) latest_post_at 
         FROM
             boards b 
+            LEFT JOIN
+                memberships m 
+                ON b.access_group = m.group_id 
+            LEFT JOIN
+                GROUPS g 
+                ON g.id = m.group_id 
             LEFT JOIN
                 topics t 
                 ON b.id = t.board_id 
             LEFT JOIN
                 posts p 
                 ON t.id = p.topic_id 
+        WHERE
+            b.access_group IS NULL 
+            OR m.user_id = :user_id
+            OR EXISTS
+            (   
+                SELECT
+                    1
+                FROM
+                    users u
+                WHERE
+                    u.id = :user_id
+                    AND u.is_admin
+            )
         GROUP BY
-            b.id;
+        (b.id, g.id);
     """
     sql = text(sql_string)
-    result = db.session.execute(sql)
+    params = {"user_id": user_id}
+    result = db.session.execute(sql, params)
     return result.fetchall()
 
 
