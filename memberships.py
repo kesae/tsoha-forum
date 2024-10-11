@@ -1,5 +1,5 @@
 from sqlalchemy import text, exc
-from app import db
+from db import db
 
 
 def add_membership(group_id, user_id):

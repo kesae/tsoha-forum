@@ -2,7 +2,7 @@
 
 {% block content %}
 <h2>Lisää ryhmä</h2>
-<form action="{{url_for('add_group')}}" method="post">
+<form action="{{url_for('group.add')}}" method="post">
     <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
     <p>
         <label for="title">Otsikko:</label>

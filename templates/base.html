@@ -13,17 +13,17 @@
         <h1>Tsoha-forum</h1>
     </header>
     <nav>
-        <a href="{{url_for('show_index')}}">Etusivu</a>
-        <a href="{{url_for('show_users')}}">Käyttäjät</a>
+        <a href="{{url_for('index.show')}}">Etusivu</a>
+        <a href="{{url_for('user.show_all')}}">Käyttäjät</a>
         {% if g.user and g.user.is_admin %}
-        <a href="{{url_for('show_groups')}}">Ryhmät</a>
+        <a href="{{url_for('group.show_all')}}">Ryhmät</a>
         {% endif %}
         {% if g.user %}
-        <a href="{{url_for('show_user', user_id=g.user.id)}}">{{g.user.username}}</a>
-        <a href="{{url_for('log_out')}}">Kirjaudu ulos</a>
+        <a href="{{url_for('user.show', user_id=g.user.id)}}">{{g.user.username}}</a>
+        <a href="{{url_for('session.log_out')}}">Kirjaudu ulos</a>
         {% else %}
-        <a href="{{url_for('log_in')}}">Kirjaudu sisään</a>
-        <a href="{{url_for('register')}}">Rekisteröidy</a>
+        <a href="{{url_for('session.log_in')}}">Kirjaudu sisään</a>
+        <a href="{{url_for('user.register')}}">Rekisteröidy</a>
         {% endif %}
     </nav>
     <br>

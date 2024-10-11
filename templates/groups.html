@@ -20,7 +20,7 @@
         <tr>
 
             <td>
-                <a href="{{url_for('show_group', group_id=group.id)}}">
+                <a href="{{url_for('group.show', group_id=group.id)}}">
                     <b>{{group.title}}</b>
                 </a>
             </td>
@@ -34,5 +34,5 @@
 </table>
 <hr>
 {% endif %}
-<a href="{{url_for('add_group')}}">Luo uusi ryhmä</a>
+<a href="{{url_for('group.add')}}">Luo uusi ryhmä</a>
 {% endblock %}

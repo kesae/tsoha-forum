@@ -1,5 +1,5 @@
 from sqlalchemy import text
-from app import db
+from db import db
 
 
 def get_board_topic(topic_id):

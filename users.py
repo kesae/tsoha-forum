@@ -1,7 +1,7 @@
 from flask import session
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy import text, exc
-from app import db
+from db import db
 from utils import set_csrf_token
 
 
