@@ -15,7 +15,7 @@ def load_session():
 
 @bp.before_app_request
 def test_csrf_token():
-    if "user_id" not in session:
+    if "user_id" not in session or not request.form:
         return
     if request.method == "POST":
         if not check_csrf_token():
