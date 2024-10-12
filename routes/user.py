@@ -45,7 +45,7 @@ def register():
         if password1 != password2:
             return render_template("error.html", message="Salasanat eroavat")
         if users.register(username, password1):
-            return redirect("/")
+            return redirect(url_for("index.show"))
         return pages.get_reserved_username_error()
 
 

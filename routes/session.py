@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, Blueprint
+from flask import render_template, request, redirect, Blueprint, url_for
 import users
 
 
@@ -13,7 +13,7 @@ def log_in():
         username = request.form["username"]
         password = request.form["password"]
         if users.login(username, password):
-            return redirect("/")
+            return redirect(url_for("index.show"))
         message = "Väärä käyttäjätunnus tai salasana"
         return render_template("error.html", message=message)
 
@@ -21,4 +21,4 @@ def log_in():
 @bp.route("/logout", methods=["POST"])
 def log_out():
     users.logout()
-    return redirect("/")
+    return redirect(url_for("index.show"))

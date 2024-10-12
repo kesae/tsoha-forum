@@ -3,7 +3,7 @@
 {% block content %}
 <article>
     <h2>Muokkaa viestiä</h2>
-    <form action="/post/{{post.id}}/edit" method="post">
+    <form action="{{url_for('post.edit', post_id=post.id)}}" method="post">
         <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
         <p>
             <label for="content">Muokkaa tekstiä:</label>

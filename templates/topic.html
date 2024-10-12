@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<a href="/board/{{topic.board_id}}"><b>{{topic.board_title}}</b></a> >>
+<a href="{{url_for('board.show', board_id=topic.board_id)}}"><b>{{topic.board_title}}</b></a> >>
 <section class="topic">
     <h2>{{topic.title}}</h2>
     {% if g.user and (g.user.id == topic.user_id or g.user.is_admin) %}
@@ -21,7 +21,7 @@
     <p>{{post.content | make_safe_html }} </p>
     {% if g.user and (g.user.id == post.user_id or g.user.is_admin) %}
     <a href="{{url_for('post.edit', post_id = post.id)}}">Muokkaa viestiä</a>
-    <form action="/post/{{post.id}}/remove" method="post">
+    <form action="{{url_for('post.remove', post_id=post.id)}}" method="post">
         <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
         <p>
             <input type="submit" value="Poista viesti">
@@ -32,7 +32,7 @@
 {% endfor %}
 {% if session.user_id %}
 <h3>Lisää uusi viesti</h3>
-<form action="/topic/{{topic.id}}" method="post">
+<form action="{{url_for('topic.show', topic_id=topic.id)}}" method="post">
     <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
     <input type="hidden" name="topic_id" id="topic_id" value="{{topic_id}}">
     <p>

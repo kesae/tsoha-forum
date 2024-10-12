@@ -3,7 +3,7 @@
 {% block content %}
 <article>
     <h2>Poista käyttäjä {{user.username}}</h2>
-    <form action="/user/{{user.id}}/remove" method="post">
+    <form action="{{url_for('user.remove', user_id=user.id)}}" method="post">
         <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
         <p>
             <label for="password">Vahvista salasanalla:</label>
