@@ -4,15 +4,15 @@
 <form action="{{url_for('user.register')}}" method="post">
     <p>
         <label for="username">Käyttäjätunnus:</label>
-        <input type="text" name="username">
+        <input type="text" id="username" name="username">
     </p>
     <p>
         <label for="password1">Salasana:</label>
-        <input type="password" name="password1">
+        <input type="password" id="password1" name="password1">
     </p>
     <p>
         <label for="password2">Salasana uudestaan:</label>
-        <input type="password" name="password2">
+        <input type="password" id="password2" name="password2">
     </p>
     <input type="submit" value="Luo tunnus">
 </form>

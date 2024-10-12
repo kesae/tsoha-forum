@@ -4,11 +4,11 @@
 <form action="{{url_for('session.log_in')}}" method="post">
     <p>
         <label for="username">Käyttäjätunnus:</label>
-        <input type="text" name="username">
+        <input type="text" id="username" name="username">
     </p>
     <p>
         <label for="password">Salasana:</label>
-        <input type="password" name="password">
+        <input type="password" id="password" name="password">
     </p>
     <input type="submit" value="Kirjaudu sisään">
 </form>
