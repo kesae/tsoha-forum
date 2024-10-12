@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
 <form action="{{url_for('user.register')}}" method="post">
     <p>
         <label for="username">Käyttäjätunnus:</label>
@@ -13,3 +16,4 @@
     </p>
     <input type="submit" value="Luo tunnus">
 </form>
+{% endblock %}
