@@ -1,4 +1,12 @@
-from flask import redirect, render_template, request, url_for, g, Blueprint
+from flask import (
+    session,
+    redirect,
+    render_template,
+    request,
+    url_for,
+    g,
+    Blueprint,
+)
 import users
 import groups
 from utils import check_password
@@ -58,5 +66,6 @@ def remove(user_id):
             return pages.get_password_error()
         users.remove_user(user_id)
         if user_id == g.user.id:
-            return redirect(url_for("session.log_out"))
+            del session["user_id"]
+            return redirect(url_for("index.show"))
         return redirect(url_for("user.show_all"))

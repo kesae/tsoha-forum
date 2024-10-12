@@ -18,7 +18,7 @@ def log_in():
         return render_template("error.html", message=message)
 
 
-@bp.route("/logout")
+@bp.route("/logout", methods=["POST"])
 def log_out():
     users.logout()
     return redirect("/")

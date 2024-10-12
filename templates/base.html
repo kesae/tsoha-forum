@@ -20,7 +20,10 @@
         {% endif %}
         {% if g.user %}
         <a href="{{url_for('user.show', user_id=g.user.id)}}">{{g.user.username}}</a>
-        <a href="{{url_for('session.log_out')}}">Kirjaudu ulos</a>
+        <form action="{{url_for('session.log_out')}}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+            <input type="submit" value="Kirjaudu ulos">
+        </form>
         {% else %}
         <a href="{{url_for('session.log_in')}}">Kirjaudu sisään</a>
         <a href="{{url_for('user.register')}}">Rekisteröidy</a>
