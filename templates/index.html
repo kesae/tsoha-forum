@@ -1,43 +1,42 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Alueet</h2>
-<table>
-    <thead>
-        <tr>
-        <tr>
-            <th scope="col">Alue</th>
-            <th scope="col">Aiheita</th>
-            <th scope="col">Viestejä</th>
-            <th scope="col">Uusin</th>
-        </tr>
-        </tr>
-    </thead>
-    <tbody>
-        {% for board in boards %}
-        <tr>
-
-            <td>
-                <a href="{{url_for('board.show', board_id=board.id)}}">
-                    <b>{{board.title}}</b>
-                    <a>
-                        <p>{{board.description}}</p>
-            </td>
-            <td>{{board.topic_count}}</td>
-            <td>{{board.post_count}}</td>
-
-            <td>
-                {% if board.latest_post_at %}
-                {{board.latest_post_at.strftime('%d.%m.%Y')}}
-                <br>
-                {{board.latest_post_at.strftime('%H:%M')}}
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<h1>Alueet</h1>
+<div class="container">
+    {% for board in boards %}
+    <section class="row">
+        <header class="col">
+            <a href="{{url_for('board.show', board_id=board.id)}}">
+                <h2 class="h5">{{board.title}}</h2>
+            </a>
+            <p class="lead">{{board.description}}</p>
+        </header>
+        <dl class="col row">
+            <div class="col">
+                <dt>Aiheita</dt>
+                <dd>{{board.topic_count}}</dd>
+            </div>
+            <div class="col">
+                <dt>Viestejä</dt>
+                <dd>{{board.post_count}}</dd>
+            </div>
+            <div class="col">
+                <dt>Uusin viesti</dt>
+                <dd>
+                    {% if board.latest_post_at %}
+                    {{board.latest_post_at.strftime('%d.%m.%Y, %H.%M')}}
+                    {% else %}
+                    Ei viestejä
+                    {% endif %}
+                </dd>
+            </div>
+        </dl>
+    </section>
+    {% endfor %}
+</div>
 {% if g.user and g.user.is_admin %}
-<a href="{{url_for('board.show_all')}}">Muokkaa alueita</a>
+<div>
+    <a href="{{url_for('board.show_all')}}">Muokkaa alueita</a>
+</div>
 {% endif %}
 {% endblock %}

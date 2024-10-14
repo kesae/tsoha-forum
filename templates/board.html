@@ -1,38 +1,41 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>{{board.title}}</h2>
-<table>
-    <thead>
-        <tr>
-        <tr>
-            <th scope="col">Aihe</th>
-            <th scope="col">Viestejä</th>
-            <th scope="col">Uusin</th>
-        </tr>
-        </tr>
-    </thead>
-    <tbody>
-        {% for topic in topics %}
-        <tr>
-
-            <td>
-                <a href="{{url_for('topic.show', topic_id=topic.id)}}">
-                    <b>{{topic.title}}</b>
-                    <a>
-            </td>
-            <td>{{topic.post_count}}</td>
-            <td>
-                {% if topic.latest_post_at %}
-                {{topic.latest_post_at.strftime('%d.%m.%Y')}}
-                <br>
-                {{topic.latest_post_at.strftime('%H:%M')}}
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-<hr>
-<a href="{{url_for('topic.add', board_id=board.id)}}"><b>Luo uusi aihe</b></a>
+<header>
+    <h1>{{board.title}}</h1>
+    <p class="lead">{{board.description}}</p>
+</header>
+<h2>Aiheet</h2>
+<div class="container">
+    {% for topic in topics %}
+    <section class="row">
+        <header class="col">
+            <a href="{{url_for('topic.show', topic_id=topic.id)}}">
+                <h3 class="h5">{{topic.title}}</h3>
+            </a>
+        </header>
+        <dl class="col row">
+            <div class="col">
+                <dt>Viestejä</dt>
+                <dd>{{topic.post_count}}</dd>
+            </div>
+            <div class="col">
+                <dt>Uusin viesti</dt>
+                <dd>
+                    {% if topic.latest_post_at %}
+                    {{topic.latest_post_at.strftime('%d.%m.%Y, %H.%M')}}
+                    {% else %}
+                    Ei viestejä
+                    {% endif %}
+                </dd>
+            </div>
+        </dl>
+    </section>
+    {% endfor %}
+</div>
+{% if g.user %}
+<div>
+    <a href="{{url_for('topic.add', board_id=board.id)}}">Lisää uusi aihe</a>
+</div>
+{% endif %}
 {% endblock %}

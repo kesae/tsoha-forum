@@ -1,38 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Käyttäjäryhmät</h2>
+<h1>Käyttäjäryhmät</h1>
 {% if not groups %}
 <p>Ei käyttäjäryhmiä</p>
 {% else %}
-<table>
-    <thead>
-        <tr>
-        <tr>
-            <th scope="col">Ryhmä</th>
-            <th scope="col">Kuvaus</th>
-            <th scope="col">Jäseniä</th>
-        </tr>
-        </tr>
-    </thead>
-    <tbody>
-        {% for group in groups %}
-        <tr>
-
-            <td>
-                <a href="{{url_for('group.show', group_id=group.id)}}">
-                    <b>{{group.title}}</b>
-                </a>
-            </td>
-            <td>
-                <p>{{group.description}}</p>
-            </td>
-            <td>{{group.member_count}}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-<hr>
+<div class="container">
+    {% for group in groups %}
+    <section class="row">
+        <header class="col">
+            <a href="{{url_for('group.show', group_id=group.id)}}">
+                <h2 class="h5">{{group.title}}</h2>
+            </a>
+            <p class="lead">{{group.description}}</p>
+        </header>
+        <dl class="col row">
+            <div class="col">
+                <dt>Jäseniä</dt>
+                <dd>{{group.member_count}}</dd>
+            </div>
+        </dl>
+    </section>
+    {% endfor %}
+</div>
+{% if g.user and g.user.is_admin %}
+<div>
+    <a href="{{url_for('group.add')}}">Luo uusi ryhmä</a>
+</div>
 {% endif %}
-<a href="{{url_for('group.add')}}">Luo uusi ryhmä</a>
+{% endif %}
+
 {% endblock %}
