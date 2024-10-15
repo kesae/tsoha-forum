@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <a href="{{url_for('board.show', board_id=topic.board_id)}}"><b>{{topic.board_title}}</b></a> >>
 <section class="topic">
-    <h2>{{topic.title}}</h2>
+    <h1>{{topic.title}}</h1>
     {% if g.user and (g.user.id == topic.user_id or g.user.is_admin) %}
     <a href="{{url_for('topic.edit',topic_id=topic.id)}}">Muokkaa otsikkoa</a>
     <a href="{{url_for('topic.remove',topic_id=topic.id)}}">Poista ketju</a>
@@ -31,15 +32,15 @@
 </article>
 {% endfor %}
 {% if session.user_id %}
-<h3>Lisää uusi viesti</h3>
+<h2>Lisää uusi viesti</h2>
 <form action="{{url_for('topic.show', topic_id=topic.id)}}" method="post">
     <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
     <input type="hidden" name="topic_id" id="topic_id" value="{{topic_id}}">
-    <p>
-        <label for="content">Viesti:</label>
-        <textarea type="text" id="content" name="content"></textarea>
-    </p>
-    <input type="submit" value="Lähetä">
+    <div class="mb-3">
+        <label for="content" class="form-label">Viesti</label>
+        <textarea type="text" id="content" name="content" class="form-control" rows="10"></textarea>
+    </div>
+    <input type="submit" value="Lähetä" class="btn btn-primary">
 </form>
 {% endif %}
 {% endblock %}

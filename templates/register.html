@@ -1,19 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<h1>Luo käyttäjätunnus</h1>
+
 <form action="{{url_for('user.register')}}" method="post">
-    <p>
-        <label for="username">Käyttäjätunnus:</label>
-        <input type="text" id="username" name="username">
-    </p>
-    <p>
-        <label for="password1">Salasana:</label>
-        <input type="password" id="password1" name="password1">
-    </p>
-    <p>
-        <label for="password2">Salasana uudestaan:</label>
-        <input type="password" id="password2" name="password2">
-    </p>
-    <input type="submit" value="Luo tunnus">
+    <div class="mb-3">
+        <label for="username" class="form-label">Käyttäjätunnus:</label>
+        <input type="text" id="username" name="username" class="form-control ">
+    </div>
+    <div class="mb-3">
+        <label for="password1" class="form-label">Salasana:</label>
+        <input type="password" id="password1" name="password1" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label for="password2" class="form-label">Salasana uudestaan:</label>
+        <input type="password" id="password2" name="password2" class="form-control">
+    </div>
+    <input type="submit" value="Luo tunnus" class="btn btn-primary">
 </form>
 {% endblock %}

@@ -2,16 +2,16 @@
 
 {% block content %}
 <article>
-    <h2>Muokkaa aiheen otsikkoa</h2>
+    <h1>Muokkaa aiheen otsikkoa</h1>
     <form action="{{url_for('topic.edit', topic_id=topic.id)}}" method="post">
         <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
-        <p>
-            <label for="title">Muokkaa otsikkoa:</label>
-            <input type="text" id="title" name="title" value="{{topic.title}}">
-        </p>
-        <p>
-            <input type="submit" value="Lähetä">
-        </p>
+        <div class="mb-3">
+            <label for="title" class="form-label">Muokattu otsikko</label>
+            <input type="text" id="title" name="title" value="{{topic.title}}" class="form-control">
+        </div>
+        <div class="mb-3">
+            <input type="submit" value="Lähetä" class="btn btn-primary">
+        </div>
     </form>
 </article>
 {% endblock %}

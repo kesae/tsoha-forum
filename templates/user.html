@@ -16,10 +16,10 @@
             {{group.description}}
             {% if g.user and g.user.is_admin %}
             <form action="{{url_for('membership.remove',group_id=group.id, user_id=g.user.id)}}" method="post">
-                <p>
+                <div>
                     <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
-                    <input type="submit" value="Poista ryhmästä">
-                </p>
+                    <input type="submit" value="Poista ryhmästä" class="btn btn-primary">
+                </div>
             </form>
         </li>
         {% endif %}
@@ -37,10 +37,10 @@
             {% for group in joinable_groups %}
             <b>{{group.title}}: </b>{{group.description}}
             <form action="{{url_for('membership.add',group_id=group.id, user_id=g.user.id)}}" method="post">
-                <p>
+                <div>
                     <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
-                    <input type="submit" value="Liitä ryhmään">
-                </p>
+                    <input type="submit" value="Liitä ryhmään" class="btn btn-primary">
+                </div>
             </form>
             {% endfor %}
         </li>

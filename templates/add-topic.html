@@ -1,17 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<h1>Lisää aihe</h1>
 <form action="{{url_for('topic.add', board_id=board_id)}}" method="post">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="hidden" name="board_id" id="board_id" value="{{board_id}}">
-    <p>
-        <label for="title">Otsikko:</label>
-        <input type="text" id="title" name="title">
-    </p>
-    <p>
-        <label for="content">Viesti:</label>
-        <textarea type="text" id="content" name="content"></textarea>
-    </p>
-    <input type="submit" value="Lähetä">
+    <div class="mb-3">
+        <label for="title" class="form-label">Otsikko:</label>
+        <input type="text" id="title" name="title" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label for="content" class="form-label">Viesti:</label>
+        <textarea type="text" id="content" name="content" class="form-control" rows="10"></textarea>
+    </div>
+    <input type="submit" value="Lähetä" class="btn btn-primary">
 </form>
 {% endblock %}

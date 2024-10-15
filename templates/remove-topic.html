@@ -1,15 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<article>
-    <h2>Poista aihe: {{topic.title}}</h2>
-    <form action="{{url_for('topic.remove', topic_id=topic.id)}}" method="post">
-        <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
-        <p>
-            <label for="password">Vahvista salasanalla:</label>
-            <input type="password" id="password" name="password">
-        </p>
-        <input type="submit" value="Poista">
-    </form>
-</article>
+<h1>Poista aihe <i>{{topic.title}}</i></h1>
+<form action="{{url_for('topic.remove', topic_id=topic.id)}}" method="post">
+    <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
+    <div class="mb-3">
+        <label for="password" class="form-label">Vahvista salasanalla:</label>
+        <input type="password" id="password" name="password" class="form-control">
+    </div>
+    <input type="submit" value="Poista" class="btn btn-primary">
+</form>
 {% endblock %}

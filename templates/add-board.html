@@ -1,25 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<h1>Luo uusi alue</h1>
+
 <form action="{{url_for('board.add')}}" method="post">
     <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
-    <p>
-        <label for="title">Otsikko:</label>
-        <input type="text" id="title" name="title">
-    </p>
-    <p>
-        <label for="description">Kuvaus:</label>
-        <input type="text" id="description" name="description">
-    </p>
-    <p>
-        <label for="access_group">Rajoita ryhmälle:</label>
-        <select name="access_group" id="access_group">
+    <div class="mb-3">
+        <label for="title" class="form-label">Otsikko:</label>
+        <input type="text" id="title" name="title" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Kuvaus:</label>
+        <input type="text" id="description" name="description" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label for="access_group" class="form-label">Rajoita ryhmälle:</label>
+        <select name="access_group" id="access_group" class="form-select">
             <option value="-1">-- Ei rajoitusta --</option>
             {% for group in access_groups %}
             <option value="{{group.id}}">{{group.title}}</option>
             {% endfor %}
         </select>
-    </p>
-    <input type="submit" value="Lähetä">
+    </div>
+    <input type="submit" value="Lähetä" class="btn btn-primary">
 </form>
 {% endblock %}

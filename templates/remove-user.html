@@ -2,14 +2,14 @@
 
 {% block content %}
 <article>
-    <h2>Poista käyttäjä {{user.username}}</h2>
+    <h2>Poista käyttäjä <i>{{user.username}}</i></h2>
     <form action="{{url_for('user.remove', user_id=user.id)}}" method="post">
         <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
-        <p>
-            <label for="password">Vahvista salasanalla:</label>
-            <input type="password" id="password" name="password">
-        </p>
-        <input type="submit" value="Poista">
+        <div class="mb-3">
+            <label for="password" class="form-label">Vahvista salasanalla:</label>
+            <input type="password" id="password" name="password" class="form-control">
+        </div>
+        <input type="submit" value="Poista" class="btn btn-primary">
     </form>
 </article>
 {% endblock %}

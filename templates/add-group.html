@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Lisää ryhmä</h2>
+<h1>Lisää käyttäjäryhmä</h1>
 <form action="{{url_for('group.add')}}" method="post">
     <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
-    <p>
-        <label for="title">Otsikko:</label>
-        <input type="text" id="otsikko" name="title">
-    </p>
-    <p>
-        <label for="description">Kuvaus:</label>
-        <input type="text" id="description" name="description">
-    </p>
-    <input type="submit" value="Lähetä">
+    <div class="mb-3">
+        <label for="title" class="form-label">Otsikko:</label>
+        <input type="text" id="otsikko" name="title" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Kuvaus:</label>
+        <input type="text" id="description" name="description" class="form-control">
+    </div>
+    <input type="submit" value="Lähetä" class="btn btn-primary">
 </form>
 {% endblock %}
