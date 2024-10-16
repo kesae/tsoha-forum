@@ -9,25 +9,49 @@
     <a href="{{url_for('topic.edit',topic_id=topic.id)}}">Muokkaa otsikkoa</a>
     <a href="{{url_for('topic.remove',topic_id=topic.id)}}">Poista ketju</a>
     {% endif %}
-    {% for post in posts %}
 </section>
-<article class="post">
-    <header>
-        <b>{{post.username}}</b>
-        {{post.created_at.strftime('%d.%m.%Y %H:%M')}}
-        {% if post.edited_at %}
-        (Muokattu: {{ post.edited_at.strftime('%d.%m.%Y %H:%M') }})
-        {% endif %}
+
+{% for post in posts %}
+<article class="container border p-0 mb-3">
+    <header class="m-0 bg-dark text-light">
+        <dl class="d-flex flex-row p-1 border-bottom">
+            <div class="px-1">
+                <dt>Viesti</dt>
+                <dd>#{{post.id}}</dd>
+            </div>
+            <div class="px-3">
+                <dt>Lähettänyt</dt>
+                <dd>{{post.username}}</dd>
+            </div>
+            <div class="px-3">
+                <dt>Lähetetty</dt>
+                <dd>{{post.created_at.strftime('%d.%m.%Y, %H.%M')}}</dd>
+            </div>
+            {% if post.edited_at %}
+            <div class="px-3">
+                <dt>Muokattu</dt>
+                <dd>{{post.edited_at.strftime('%d.%m.%Y, %H.%M')}}</dd>
+            </div>
+            {% endif %}
+        </dl>
     </header>
-    <p>{{post.content | make_safe_html }} </p>
-    {% if g.user and (g.user.id == post.user_id or g.user.is_admin) %}
-    <a href="{{url_for('post.edit', post_id = post.id)}}">Muokkaa viestiä</a>
-    <form action="{{url_for('post.remove', post_id=post.id)}}" method="post">
-        <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
-        <p>
-            <input type="submit" value="Poista viesti">
-        </p>
-    </form>
+    <p class="px-3 py-4">
+        {{post.content | make_safe_html}}
+    </p>
+    {% if g.user and (g.user.is_admin or g.user.id == post.user_id) %}
+    <footer class="d-flex flex-row justify-content-between border-top align-items-baseline">
+        <div class="px-3 py-2 m-0">
+            <a href="{{url_for('post.edit', post_id = post.id)}}">Muokkaa viestiä</a>
+        </div>
+        <div class="px-3 py-2 m-0">
+            <form action="{{url_for('post.remove', post_id=post.id)}}" method="post">
+                <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
+                <div class="m-0">
+                    <input type="submit" value="Poista viesti" class="btn btn-danger my-1">
+                </div>
+            </form>
+        </div>
+    </footer>
     {% endif %}
 </article>
 {% endfor %}
