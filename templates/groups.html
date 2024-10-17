@@ -7,19 +7,23 @@
 {% else %}
 <div class="container">
     {% for group in groups %}
-    <section class="row">
-        <header class="col">
+    <section class="row border-bottom mb-1">
+        <header class="col my-auto">
             <a href="{{url_for('group.show', group_id=group.id)}}">
-                <h2 class="h5">{{group.title}}</h2>
+                <h2 class="h5 my-2">{{group.title}}</h2>
             </a>
-            <p class="lead">{{group.description}}</p>
+            <p class="lead my-2">{{group.description}}</p>
         </header>
-        <dl class="col row">
-            <div class="col">
-                <dt>Jäseniä</dt>
-                <dd>{{group.member_count}}</dd>
-            </div>
+        <dl class="col my-auto">
+            <dt>Jäseniä</dt>
+            <dd>{{group.member_count}}</dd>
         </dl>
+        <div class="col my-auto">
+            <a href="{{url_for('group.edit', group_id=group.id)}}">Muokkaa ryhmää</a>
+        </div>
+        <div class="col my-auto">
+            <a href="{{url_for('group.remove', group_id=group.id)}}">Poista ryhmä</a>
+        </div>
     </section>
     {% endfor %}
 </div>

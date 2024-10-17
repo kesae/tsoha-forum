@@ -103,6 +103,39 @@ def add_group(title, description):
     return True
 
 
+def edit_group(group_id, title, description):
+    sql_string = """
+        UPDATE
+            groups 
+        SET
+            title = :title,
+            description = :description
+        WHERE
+            id = :id
+    """
+    sql = text(sql_string)
+    params = {"id": group_id, "title": title, "description": description}
+    try:
+        db.session.execute(sql, params)
+        db.session.commit()
+    except exc.IntegrityError:
+        return False
+    return True
+
+
+def remove_group(group_id):
+    sql_string = """
+        DELETE
+        FROM
+            groups 
+        WHERE
+            id = :id;
+    """
+    sql = text(sql_string)
+    db.session.execute(sql, {"id": group_id})
+    db.session.commit()
+
+
 def add_membership(group_id, user_id):
     sql_string = """
         INSERT INTO

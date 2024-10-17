@@ -34,3 +34,8 @@ def get_reserved_username_error():
 def get_reserved_board_error():
     message = "Samanniminen alue on jo olemassa"
     return render_template("error.html", message=message), 409
+
+
+def get_reserved_group_error():
+    message = "Samanniminen käyttäjäryhmä on jo olemassa"
+    return render_template("error.html", message=message), 409

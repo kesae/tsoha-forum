@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Muokkaa käyttäjäryhmää</h1>
+
+<dl class="my-5">
+    <dt>Ryhmän nykyinen nimi</dt>
+    <dd>{{group.title}}</dd>
+    <dt>Ryhmän nykyinen kuvaus</dt>
+    <dd>{{group.description}}</dd>
+</dl>
+
+<form action="{{url_for('group.edit', group_id=group.id)}}" method="post">
+    <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
+    <div class="mb-3">
+        <label for="title" class="form-label">Uusi nimi</label>
+        <input type="text" id="Ryhmän nimi" name="title" class="form-control" value="{{group.title}}">
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Uusi kuvaus</label>
+        <input type="text" id="description" name="description" class="form-control" value="{{group.description}}">
+    </div>
+    <input type="submit" value="Lähetä" class="btn btn-primary">
+</form>
+{% endblock %}
