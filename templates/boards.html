@@ -20,15 +20,10 @@
             </tl>
         </div>
         <div class="col my-auto">
-            <a href="">Muokkaa aluetta</a>
+            <a href="{{url_for('board.edit', board_id=board.id)}}">Muokkaa aluetta</a>
         </div>
         <div class="col my-auto">
-            <form action="/">
-                <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
-                <div>
-                    <input type="submit" value="Poista alue" class="btn btn-danger">
-                </div>
-            </form>
+            <a href="{{url_for('board.remove', board_id=board.id)}}">Poista alue</a>
         </div>
     </section>
     {% endfor %}

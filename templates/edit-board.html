@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Muokkaa aluetta</h1>
+
+<form action="{{url_for('board.edit', board_id=board.id)}}" method="post">
+    <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
+    <div class="mb-3">
+        <label for="title" class="form-label">Otsikko:</label>
+        <input type="text" id="title" name="title" value="{{board.title}}" class=" form-control">
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Kuvaus:</label>
+        <input type="text" id="description" name="description" value="{{board.description}}" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label for="access_group" class="form-label">Rajoita ryhmälle:</label>
+        <select name="access_group" id="access_group" class="form-select">
+            {% if not board.access_group %}
+            <option value="-1" selected>-- Ei rajoitusta --</option>
+            {% else %}
+            <option value="-1">-- Ei rajoitusta --</option>
+            {% endif %}
+            {% for group in access_groups %}
+            {% if board.access_group and board.access_group == group.id %}
+            <option value="{{group.id}}" selected>{{group.title}}</option>
+            {% else %}
+            <option value="{{group.id}}">{{group.title}}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+    <input type="submit" value="Lähetä" class="btn btn-primary">
+</form>
+{% endblock %}

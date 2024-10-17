@@ -5,13 +5,18 @@ from db import db
 def get_board(board_id):
     sql_string = """
         SELECT
-            id,
-            title,
-            description 
+            b.id,
+            b.title title,
+            b.description,
+            b.access_group,
+            g.title access_title
         FROM
-            boards 
+            boards b
+            LEFT JOIN
+                groups g
+                ON b.access_group = g.id
         WHERE
-            id = :id;
+            b.id = :id;
     """
     sql = text(sql_string)
     result = db.session.execute(sql, {"id": board_id})
@@ -84,6 +89,46 @@ def add_board(title, description, access_group):
     except exc.IntegrityError:
         return False
     return True
+
+
+def edit_board(board_id, title, description, access_group):
+    sql_string = """
+        UPDATE
+            boards 
+        SET
+            title = :title,
+            description = :description,
+            access_group = :access_group 
+        WHERE
+            id = :id;
+
+    """
+    sql = text(sql_string)
+    params = {
+        "id": board_id,
+        "title": title,
+        "description": description,
+        "access_group": access_group,
+    }
+    try:
+        db.session.execute(sql, params)
+        db.session.commit()
+    except exc.IntegrityError:
+        return False
+    return True
+
+
+def delete_board(board_id):
+    sql_string = """
+        DELETE
+        FROM
+            boards 
+        WHERE
+            id = :id;
+    """
+    sql = text(sql_string)
+    db.session.execute(sql, {"id": board_id})
+    db.session.commit()
 
 
 def nonadmin_has_access(user_id, board_id):

@@ -29,3 +29,8 @@ def get_password_error():
 def get_reserved_username_error():
     message = "Käyttäjänimi on jo varattu"
     return render_template("error.html", message=message), 409
+
+
+def get_reserved_board_error():
+    message = "Samanniminen alue on jo olemassa"
+    return render_template("error.html", message=message), 409
