@@ -1,13 +1,39 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Muokkaa alueita</h2>
-{% for board in boards %}
-<section>
-    <b>{{board.title}}</b>
-    <p>{{board.description}}</p>
-</section>
-<hr>
-{% endfor %}
-<a href="{{url_for('board.add')}}">Luo uusi alue</a>
+<h1>Muokkaa alueita</h1>
+<div class="container">
+    {% for board in boards %}
+    <section class="row border-bottom">
+        <header class="col my-2">
+            <h2 class="h5 my-1">{{board.title}}</h2>
+            <p class="my-2">{{board.description}}</p>
+        </header>
+        <div class="col my-auto">
+            <tl>
+                <dt>Pääsyryhmä</dt>
+                {% if board.access_group %}
+                <dd>{{board.access_title}}</dd>
+                {% else %}
+                <dd>-</dd>
+                {% endif %}
+            </tl>
+        </div>
+        <div class="col my-auto">
+            <a href="">Muokkaa aluetta</a>
+        </div>
+        <div class="col my-auto">
+            <form action="/">
+                <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
+                <div>
+                    <input type="submit" value="Poista alue" class="btn btn-danger">
+                </div>
+            </form>
+        </div>
+    </section>
+    {% endfor %}
+</div>
+<div>
+    <a href="{{url_for('board.add')}}">Luo uusi alue</a>
+</div>
 {% endblock %}
