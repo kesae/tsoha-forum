@@ -9,7 +9,7 @@ from flask import (
 )
 import topics
 import posts
-from utils import check_board_access, check_password
+from utils import check_board_access, check_password, create_page_numbers
 import pages
 
 
@@ -40,10 +40,30 @@ def add(board_id):
 
 @bp.route("/topic/<int:topic_id>", methods=["GET", "POST"])
 def show(topic_id):
+    page_size = 20
+    try:
+        page = int(request.args.get("page", 1))
+    except ValueError:
+        return pages.get_missing_error()
+    post_count = posts.count_topic_posts(topic_id)
+    last_page = max(0, post_count - 1) // (page_size) + 1
+    limited_page = min(max(1, page), last_page)
+    if limited_page != page:
+        return redirect(
+            url_for("topic.show", topic_id=topic_id, page=limited_page)
+        )
+    page_numbers = create_page_numbers(page, last_page)
     topic = topics.get_board_topic(topic_id)
-    topic_posts = posts.get_posts(topic_id)
+    topic_posts = posts.get_paginated_posts(
+        topic_id, page, page_size=page_size
+    )
     if request.method == "GET":
-        return render_template("topic.html", posts=topic_posts, topic=topic)
+        return render_template(
+            "topic.html",
+            posts=topic_posts,
+            topic=topic,
+            page_numbers=page_numbers,
+        )
     if request.method == "POST":
         user_id = session.get("user_id")
         if not user_id:

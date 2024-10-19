@@ -2,7 +2,21 @@ from sqlalchemy import text
 from db import db
 
 
-def get_posts(topic_id):
+def count_topic_posts(topic_id):
+    sql_string = """
+        SELECT
+            COUNT(*)
+        FROM
+            posts p
+        WHERE
+            p.topic_id = :topic_id;
+    """
+    sql = text(sql_string)
+    result = db.session.execute(sql, {"topic_id": topic_id})
+    return result.fetchone().count
+
+
+def get_paginated_posts(topic_id, page=1, page_size=20):
     sql_string = """
         SELECT
             p.id id,
@@ -17,10 +31,17 @@ def get_posts(topic_id):
             users u
             ON u.id = p.user_id
         WHERE
-            topic_id = :topic_id;
+            topic_id = :topic_id
+        ORDER BY
+            p.created_at,
+            p.id
+        LIMIT
+            :page_size
+            OFFSET :page_size * (:page - 1);
     """
     sql = text(sql_string)
-    result = db.session.execute(sql, {"topic_id": topic_id})
+    params = {"topic_id": topic_id, "page": page, "page_size": page_size}
+    result = db.session.execute(sql, params)
     return result.fetchall()
 
 
@@ -35,7 +56,7 @@ def get_post(post_id):
             edited_at 
         FROM
             posts 
-        WHERE
+        WHERE)
             id = :id;
     """
     sql = text(sql_string)

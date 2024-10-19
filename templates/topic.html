@@ -55,6 +55,33 @@
     {% endif %}
 </article>
 {% endfor %}
+<nav aria-label="Viestisivujen selaus">
+    {% set page = request.args.get("page") | int %}
+    <ul class="pagination">
+        {% if page == 1 %}
+        <li class="page-item disabled"><a class="page-link">Edellinen</a></li>
+        {% else %}
+        <li class="page-item"><a class="page-link"
+                href="{{url_for('topic.show', topic_id=topic.id, page=page-1)}}">Edellinen</a></li>
+        {% endif %}
+        {% for num in page_numbers %}
+        {% if num == page %}
+        <li class="page-item active">
+            <span class="page-link">{{num}}</span>
+        </li>
+        {% else %}
+        <li class="page-item"><a class="page-link"
+                href="{{url_for('topic.show', topic_id=topic.id, page=num)}}">{{num}}</a></li>
+        {% endif %}
+        {% endfor %}
+        {% if page == page_numbers[-1] %}
+        <li class="page-item disabled"><a class="page-link">Seuraava</a></li>
+        {% else %}
+        <li class="page-item"><a class="page-link"
+                href="{{url_for('topic.show', topic_id=topic.id, page=page+1)}}">Seuraava</a></li>
+        {% endif %}
+    </ul>
+</nav>
 {% if session.user_id %}
 <h2>Lisää uusi viesti</h2>
 <form action="{{url_for('topic.show', topic_id=topic.id)}}" method="post">
