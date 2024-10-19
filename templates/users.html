@@ -12,6 +12,30 @@
     </li>
     {% endfor %}
 </ul>
+<nav aria-label="Käyttäjien selaus">
+    {% set page = request.args.get("page") | int %}
+    <ul class="pagination">
+        {% if page == 1 %}
+        <li class="page-item disabled"><a class="page-link">Edellinen</a></li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="{{url_for('user.show_all', page=page-1)}}">Edellinen</a></li>
+        {% endif %}
+        {% for num in page_numbers %}
+        {% if num == page %}
+        <li class="page-item active">
+            <span class="page-link">{{num}}</span>
+        </li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="{{url_for('user.show_all', page=num)}}">{{num}}</a></li>
+        {% endif %}
+        {% endfor %}
+        {% if page == page_numbers[-1] %}
+        <li class="page-item disabled"><a class="page-link">Seuraava</a></li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="{{url_for('user.show_all', page=page+1)}}">Seuraava</a></li>
+        {% endif %}
+    </ul>
+</nav>
 {% else %}
 <p>Ei käyttäjiä</p>
 {% endif %}

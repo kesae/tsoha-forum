@@ -9,7 +9,7 @@ from flask import (
 )
 import users
 import groups
-from utils import check_password
+from utils import check_password, create_page_numbers
 import pages
 
 
@@ -18,7 +18,22 @@ bp = Blueprint("user", __name__)
 
 @bp.route("/users")
 def show_all():
-    return render_template("users.html", users=users.get_users())
+    page_size = 20
+    try:
+        page = int(request.args.get("page", 1))
+    except ValueError:
+        return pages.get_missing_error()
+    user_count = users.get_user_count()
+    last_page = max(0, user_count - 1) // (page_size) + 1
+    limited_page = min(max(1, page), last_page)
+    if limited_page != page:
+        return redirect(url_for("page.show_all", page=limited_page))
+    page_numbers = create_page_numbers(page, last_page)
+    return render_template(
+        "users.html",
+        users=users.get_paginated_users(page=page),
+        page_numbers=page_numbers,
+    )
 
 
 @bp.route("/user/<int:user_id>")

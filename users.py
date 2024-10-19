@@ -74,6 +74,18 @@ def get_password_hash(user_id):
     return result.fetchone()
 
 
+def get_user_count():
+    sql_string = """
+        SELECT
+            COUNT(*)
+        FROM
+            users
+    """
+    sql = text(sql_string)
+    result = db.session.execute(sql)
+    return result.fetchone().count
+
+
 def get_users():
     sql_string = """
         SELECT
@@ -83,6 +95,25 @@ def get_users():
     """
     sql = text(sql_string)
     result = db.session.execute(sql)
+    return result.fetchall()
+
+
+def get_paginated_users(page=1, page_size=20):
+    sql_string = """
+        SELECT
+            id, username, is_admin
+        FROM
+            users
+        ORDER BY
+            username,
+            id
+        LIMIT
+            :page_size
+            OFFSET :page_size * (:page - 1);
+    """
+    sql = text(sql_string)
+    params = {"page": page, "page_size": page_size}
+    result = db.session.execute(sql, params)
     return result.fetchall()
 
 
