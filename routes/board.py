@@ -10,7 +10,12 @@ from flask import (
 import boards
 import topics
 import groups
-from utils import check_board_access, get_boards, check_password
+from utils import (
+    check_board_access,
+    get_boards,
+    check_password,
+    create_page_numbers,
+)
 import errorpages
 
 
@@ -51,13 +56,33 @@ def add():
 
 @bp.route("/board/<int:board_id>")
 def show(board_id):
+    PAGE_SIZE = 20
+    try:
+        page = int(request.args.get("page", 1))
+    except ValueError:
+        return errorpages.get_page_missing()
     if not check_board_access(board_id):
         return errorpages.get_no_access()
     board = boards.get_board(board_id)
     if not board:
         return errorpages.get_page_missing()
-    board_topics = topics.get_topics(board_id)
-    return render_template("board.html", board=board, topics=board_topics)
+    topic_count = topics.get_board_topic_count(board_id)
+    print("Topic count", topic_count)
+    last_page = max(0, topic_count - 1) // (PAGE_SIZE) + 1
+    print("Last page", last_page)
+    limited_page = min(max(1, page), last_page)
+    if limited_page != page:
+        return redirect(
+            url_for("board.show", board_id=board_id, page=limited_page)
+        )
+    page_numbers = create_page_numbers(page, last_page)
+    board_topics = topics.get_paginated_topics(board_id, page)
+    return render_template(
+        "board.html",
+        board=board,
+        topics=board_topics,
+        page_numbers=page_numbers,
+    )
 
 
 @bp.route("/board/<int:board_id>/edit", methods=["GET", "POST"])

@@ -41,11 +41,57 @@ def get_topics(board_id):
         GROUP BY
             t.id 
         ORDER BY
-            latest_post_at ASC;
+            latest_post_at DESC NULLS LAST,
+            t.id DESC;
     """
     sql = text(sql_string)
     result = db.session.execute(sql, {"board_id": board_id})
     return result.fetchall()
+
+
+def get_paginated_topics(board_id, page=1, page_size=20):
+    sql_string = """
+        SELECT
+            t.id id,
+            t.user_id user_id,
+            t.title title,
+            COUNT(p.id) post_count,
+            MAX(p.created_at) latest_post_at 
+        FROM
+            topics t 
+            LEFT JOIN
+                posts p 
+                ON t.id = topic_id 
+        WHERE
+            t.board_id = :board_id 
+        GROUP BY
+            t.id 
+        ORDER BY
+            latest_post_at DESC NULLS LAST,
+            t.id DESC
+        LIMIT
+            :page_size
+            OFFSET :page_size * (:page - 1);
+    """
+    sql = text(sql_string)
+    result = db.session.execute(
+        sql, {"board_id": board_id, "page": page, "page_size": page_size}
+    )
+    return result.fetchall()
+
+
+def get_board_topic_count(board_id):
+    sql_string = """
+        SELECT
+            COUNT(*)
+        FROM
+            topics t 
+        WHERE
+            t.board_id = :board_id;
+    """
+    sql = text(sql_string)
+    result = db.session.execute(sql, {"board_id": board_id})
+    return result.fetchone().count
 
 
 def add_topic(user_id, title, board_id):
