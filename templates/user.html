@@ -1,51 +1,63 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Käyttäjä {{user.username}}</h2>
-{% for group in groups %}
-{% endfor %}
+
+<h1>Käyttäjä</h1>
+<dl>
+    <dt>Käyttäjänimi</dt>
+    <dd>{{user.username}}</dd>
+</dl>
 
 {% if g.user and (g.user.id == user.id or g.user.is_admin) %}
+<h2>Käyttäjän ryhmät</h2>
 {% if groups %}
-<section>
-    <h3>Käyttäjän ryhmät</h3>
-    <ul>
-        {% for group in groups %}
-        <li>
-            <b>{{group.title}}: </b>
-            {{group.description}}
-            {% if g.user and g.user.is_admin %}
-            <form action="{{url_for('membership.remove',group_id=group.id, user_id=user.id)}}" method="post">
-                <div>
-                    <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
-                    <input type="submit" value="Poista ryhmästä" class="btn btn-primary">
-                </div>
-            </form>
-        </li>
-        {% endif %}
-        {% endfor %}
-    </ul>
+{% for group in groups %}
+<section class="row border-bottom mb-3">
+    <header class="col my-auto">
+        <a href="{{url_for('group.show', group_id=group.id)}}">
+            <h3 class="h5 my-3">{{group.title}}</h3>
+            <p>{{group.description}}</p>
+        </a>
+    </header>
+    {% if g.user and g.user.is_admin %}
+    <div class="col my-auto">
+        <form action="{{url_for('membership.remove',group_id=group.id, user_id=user.id)}}" method="post">
+            <div>
+                <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
+                <input type="submit" value="Poista ryhmästä" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
+    {% endif %}
 </section>
+{% endfor %}
+{% else %}
+<p>Ei ryhmiä</p>
 {% endif %}
 {% endif %}
 {% if g.user and g.user.is_admin %}
+<h2>Muut ryhmät</h2>
 {% if joinable_groups %}
-<section>
-    <h3>Muut ryhmät</h3>
-    <ul>
-        <li>
-            {% for group in joinable_groups %}
-            <b>{{group.title}}: </b>{{group.description}}
-            <form action="{{url_for('membership.add',group_id=group.id, user_id=user.id)}}" method="post">
-                <div>
-                    <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
-                    <input type="submit" value="Liitä ryhmään" class="btn btn-primary">
-                </div>
-            </form>
-            {% endfor %}
-        </li>
-    </ul>
+{% for group in joinable_groups %}
+<section class="row border-bottom mb-3">
+    <header class="col my-auto">
+        <a href="{{url_for('group.show', group_id=group.id)}}">
+            <h3 class="h5 my-3">{{group.title}}</h3>
+        </a>
+        <p>{{group.description}}</p>
+    </header>
+    <div class="col my-auto">
+        <form action="{{url_for('membership.add',group_id=group.id, user_id=user.id)}}" method="post">
+            <div>
+                <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
+                <input type="submit" value="Liitä ryhmään" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
 </section>
+{% endfor %}
+{% else %}
+<p>Ei ryhmiä</p>
 {% endif %}
 {% endif %}
 {% endblock %}
