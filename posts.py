@@ -56,7 +56,7 @@ def get_post(post_id):
             edited_at 
         FROM
             posts 
-        WHERE)
+        WHERE
             id = :id;
     """
     sql = text(sql_string)
