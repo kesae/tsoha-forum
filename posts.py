@@ -209,3 +209,46 @@ def count_search_posts(user_id, query):
     }
     result = db.session.execute(sql, params)
     return result.fetchone().count
+
+
+def get_post_location(post_id):
+    sql_string = """
+        SELECT
+            t.id topic_id,
+            COUNT(*)
+        FROM
+            topics t 
+            JOIN
+                posts p
+                ON t.id = p.topic_id 
+        WHERE
+            t.id = 
+            (
+                SELECT
+                    t.id id
+            FROM
+                topics t 
+            JOIN
+                posts p
+                ON t.id = p.topic_id 
+            WHERE
+                p.id = :post_id
+            )
+            AND (p.created_at, p.id) < ((
+                SELECT
+                    created_at,
+                    id
+                FROM
+                    posts
+                WHERE
+                    id = :post_id
+            ))
+        GROUP BY
+            t.id;
+    """
+    sql = text(sql_string)
+    params = {
+        "post_id": post_id,
+    }
+    result = db.session.execute(sql, params)
+    return result.fetchone()

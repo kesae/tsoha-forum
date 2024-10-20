@@ -12,6 +12,16 @@ def check_access():
         return errorpages.get_no_login()
 
 
+@bp.route("/post/<int:post_id>", methods=["GET", "POST"])
+def show(post_id):
+    PAGE_SIZE = 20
+    topic_id, position = posts.get_post_location(post_id)
+    page = max(0, position) // (PAGE_SIZE) + 1
+    return redirect(
+        url_for("topic.show", topic_id=topic_id, page=page) + f"#n{post_id}"
+    )
+
+
 @bp.route("/post/<int:post_id>/edit", methods=["GET", "POST"])
 def edit(post_id):
     post = posts.get_post(post_id)

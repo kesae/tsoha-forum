@@ -20,8 +20,9 @@
     <header class="m-0 bg-dark text-light">
         <dl class="d-flex flex-row p-1 border-bottom">
             <div class="px-1">
-                <dt>Viesti</dt>
-                <dd>#{{post.id}}</dd>
+                <dt>Linkki</dt>
+                <dd><a href="{{url_for('post.show', post_id=post.id)}}" class="link-light">#{{post.id}}</a>
+                </dd>
             </div>
             <div class="px-3">
                 <dt>Lähettänyt</dt>
