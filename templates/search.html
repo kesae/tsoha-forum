@@ -2,7 +2,7 @@
 
 {% block content %}
 <section>
-    <h1>Hae viestejä</h1>
+    <h1 class="my-5">Hae viestejä</h1>
     <form action="{{url_for('post.search')}}" method="get">
         <div class="mb-3">
             <input type="text" id="query" name="query" value="{{request.args.get('query','')}}" class="form-control">

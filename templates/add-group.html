@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Lisää käyttäjäryhmä</h1>
+<h1 class="my-5">Lisää käyttäjäryhmä</h1>
 <form action="{{url_for('group.add')}}" method="post">
     <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
     <div class="mb-3">

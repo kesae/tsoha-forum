@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Kirjaudu sisään</h1>
+<h1 class="my-5">Kirjaudu sisään</h1>
 <form action="{{url_for('session.log_in')}}" method="post">
     <div class="mb-3">
         <label for="username" class="form-label">Käyttäjätunnus:</label>

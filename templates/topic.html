@@ -9,14 +9,13 @@
         <li class="breadcrumb-item active" aria-current="page">{{topic.title}}</li>
     </ol>
 </nav>
-<a href="{{url_for('board.show', board_id=topic.board_id)}}">{{topic.board_title}}</a> >>
-<section class="topic">
-    <h1>{{topic.title}}</h1>
+<header class="my-5">
+    <h1 class="mb-0">{{topic.title}}</h1>
     {% if g.user and (g.user.id == topic.user_id or g.user.is_admin) %}
     <a href="{{url_for('topic.edit',topic_id=topic.id)}}">Muokkaa otsikkoa</a>
     <a href="{{url_for('topic.remove',topic_id=topic.id)}}">Poista ketju</a>
     {% endif %}
-</section>
+</header>
 
 {% for post in posts %}
 <article class="container border p-0 mb-3" id="n{{post.id}}">

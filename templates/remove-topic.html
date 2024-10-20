@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Poista aihe <i>{{topic.title}}</i></h1>
+<h1 class="my-5">Poista aihe <i>{{topic.title}}</i></h1>
 <form action="{{url_for('topic.remove', topic_id=topic.id)}}" method="post">
     <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
     <div class="mb-3">

@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Käyttäjät</h2>
+<h1 class="my-5">Käyttäjät</h1>
 {% if users %}
-<ul>
+<ul class="list-unstyled ps-3">
     {% for user in users %}
     <li>
         <p>
