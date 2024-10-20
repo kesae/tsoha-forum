@@ -134,20 +134,3 @@ def remove_group(group_id):
     sql = text(sql_string)
     db.session.execute(sql, {"id": group_id})
     db.session.commit()
-
-
-def add_membership(group_id, user_id):
-    sql_string = """
-        INSERT INTO
-            memberships (group_id, user_id)
-        VALUES
-            (:group_id, user_id);
-    """
-    sql = text(sql_string)
-    params = {"group_id": group_id, "user_id": user_id}
-    try:
-        db.session.execute(sql, params)
-        db.session.commit()
-    except exc.IntegrityError:
-        return False
-    return True
