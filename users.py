@@ -117,17 +117,5 @@ def get_paginated_users(page=1, page_size=20):
     return result.fetchall()
 
 
-def remove_user(user_id):
-    sql_string = """
-        DELETE FROM
-            users
-        WHERE
-            id = :id;
-    """
-    sql = text(sql_string)
-    db.session.execute(sql, {"id": user_id})
-    db.session.commit()
-
-
 def logout():
     del session["user_id"]
