@@ -6,10 +6,14 @@ import errorpages
 bp = Blueprint("post", __name__)
 
 
-@bp.route("/post/<int:post_id>/edit", methods=["GET", "POST"])
-def edit(post_id):
+@bp.before_request
+def check_access():
     if not g.user:
         return errorpages.get_no_login()
+
+
+@bp.route("/post/<int:post_id>/edit", methods=["GET", "POST"])
+def edit(post_id):
     post = posts.get_post(post_id)
     if not post:
         return errorpages.get_page_missing()
@@ -27,8 +31,6 @@ def edit(post_id):
 
 @bp.route("/post/<int:post_id>/remove", methods=["POST"])
 def remove(post_id):
-    if not g.user:
-        return errorpages.get_no_login()
     post = posts.get_post(post_id)
     if not post:
         return errorpages.get_page_missing()
