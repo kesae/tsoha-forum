@@ -103,3 +103,109 @@ def remove_post(post_id):
     sql = text(sql_string)
     db.session.execute(sql, {"id": post_id})
     db.session.commit()
+
+
+def search_posts(user_id, query, page=1, page_size=20):
+    sql_string = """
+        SELECT
+            p.id,
+            p.user_id,
+            content,
+            created_at,
+            edited_at,
+            username
+        FROM
+            boards b 
+            LEFT JOIN
+                memberships m 
+                ON b.access_group = m.group_id 
+            LEFT JOIN
+                GROUPS g 
+                ON g.id = m.group_id 
+            JOIN
+                topics t 
+                ON b.id = t.board_id 
+            JOIN
+                posts p 
+                ON t.id = p.topic_id
+            JOIN
+                users u
+                ON u.id = p.user_id 
+        WHERE
+            p.content LIKE :query
+            AND
+            (
+                b.access_group IS NULL 
+                OR m.user_id = :user_id
+                OR EXISTS
+                (   
+                    SELECT
+                        1
+                    FROM
+                        users u
+                    WHERE
+                        u.id = :user_id
+                        AND u.is_admin
+                )
+            )
+        ORDER BY
+            p.created_at DESC,
+            p.id DESC
+        LIMIT
+            :page_size
+            OFFSET :page_size * (:page - 1);
+    """
+    sql = text(sql_string)
+    params = {
+        "user_id": user_id,
+        "query": f"%{query}%",
+        "page": page,
+        "page_size": page_size,
+    }
+    result = db.session.execute(sql, params)
+    return result.fetchall()
+
+
+def count_search_posts(user_id, query):
+    sql_string = """
+        SELECT
+            COUNT(*)
+        FROM
+            boards b 
+            LEFT JOIN
+                memberships m 
+                ON b.access_group = m.group_id 
+            LEFT JOIN
+                GROUPS g 
+                ON g.id = m.group_id 
+            JOIN
+                topics t 
+                ON b.id = t.board_id 
+            JOIN
+                posts p 
+                ON t.id = p.topic_id
+        WHERE
+            p.content LIKE :query
+            AND
+            (
+                b.access_group IS NULL 
+                OR m.user_id = :user_id
+                OR EXISTS
+                (   
+                    SELECT
+                        1
+                    FROM
+                        users u
+                    WHERE
+                        u.id = :user_id
+                        AND u.is_admin
+                )
+            );
+    """
+    sql = text(sql_string)
+    params = {
+        "user_id": user_id,
+        "query": f"%{query}%",
+    }
+    result = db.session.execute(sql, params)
+    return result.fetchone().count

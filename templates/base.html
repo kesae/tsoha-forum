@@ -23,6 +23,11 @@
                     <li class="nav-item">
                         <a href="{{url_for('user.show_all')}}" class="nav-link">Käyttäjät</a>
                     </li>
+                    {% if g.user %}
+                    <li class="nav-item">
+                        <a href="{{url_for('post.search')}}" class="nav-link">Viestihaku</a>
+                    </li>
+                    {% endif %}
                     {% if g.user and g.user.is_admin %}
                     <li class="nav-item">
                         <a href="{{url_for('group.show_all')}}" class="nav-link">Ryhmät</a>

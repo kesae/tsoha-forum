@@ -1,7 +1,7 @@
 from flask import redirect, render_template, request, url_for, g, Blueprint
 import posts
 import errorpages
-
+from utils import create_page_numbers
 
 bp = Blueprint("post", __name__)
 
@@ -39,3 +39,25 @@ def remove(post_id):
     if request.method == "POST":
         posts.remove_post(post_id)
         return redirect(url_for("topic.show", topic_id=post.topic_id))
+
+
+@bp.route("/posts/search")
+def search():
+    query = request.args.get("query")
+    if not query:
+        return render_template("search.html", results=None)
+    try:
+        page = int(request.args.get("page", 1))
+    except ValueError:
+        return errorpages.get_page_missing()
+    PAGE_SIZE = 20
+    result_count = posts.count_search_posts(g.user.id, query)
+    last_page = max(0, result_count - 1) // (PAGE_SIZE) + 1
+    limited_page = min(max(1, page), last_page)
+    if limited_page != page:
+        return redirect(url_for("search.html", query=query, page=limited_page))
+    page_numbers = create_page_numbers(page, last_page)
+    results = posts.search_posts(g.user.id, query, page=page)
+    return render_template(
+        "search.html", results=results, page_numbers=page_numbers
+    )

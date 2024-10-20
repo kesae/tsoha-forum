@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section>
+    <h1>Hae viestejä</h1>
+    <form action="{{url_for('post.search')}}" method="get">
+        <div class="mb-3">
+            <input type="text" id="query" name="query" value="{{request.args.get('query','')}}" class="form-control">
+        </div>
+        <input type="submit" value="Hae" class="btn btn-primary">
+    </form>
+</section>
+{% if request.args.get("query") %}
+<h2>Haun tulokset</h2>
+{% if not results %}
+<p>Ei tuloksia</p>
+{% else %}
+{% for post in results %}
+<article class="container border p-0 mb-3">
+    <header class="m-0 bg-dark text-light">
+        <dl class="d-flex flex-row p-1 border-bottom">
+            <div class="px-1">
+                <dt>Viesti</dt>
+                <dd>#{{post.id}}</dd>
+            </div>
+            <div class="px-3">
+                <dt>Lähettänyt</dt>
+                <dd>{{post.username}}</dd>
+            </div>
+            <div class="px-3">
+                <dt>Lähetetty</dt>
+                <dd>{{post.created_at.strftime('%d.%m.%Y, %H.%M')}}</dd>
+            </div>
+            {% if post.edited_at %}
+            <div class="px-3">
+                <dt>Muokattu</dt>
+                <dd>{{post.edited_at.strftime('%d.%m.%Y, %H.%M')}}</dd>
+            </div>
+            {% endif %}
+        </dl>
+    </header>
+    <p class="px-3 py-4">
+        {{post.content | make_safe_html}}
+    </p>
+    {% if g.user and (g.user.is_admin or g.user.id == post.user_id) %}
+    <footer class="d-flex flex-row justify-content-between border-top align-items-baseline">
+        <div class="px-3 py-2 m-0">
+            <a href="{{url_for('post.edit', post_id = post.id)}}">Muokkaa viestiä</a>
+        </div>
+        <div class="px-3 py-2 m-0">
+            <form action="{{url_for('post.remove', post_id=post.id)}}" method="post">
+                <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
+                <div class="m-0">
+                    <input type="submit" value="Poista viesti" class="btn btn-danger my-1">
+                </div>
+            </form>
+        </div>
+    </footer>
+    {% endif %}
+</article>
+{% endfor %}
+
+<nav aria-label="Viestisivujen selaus">
+    {% set page = request.args.get("page") | int %}
+    {% set query = request.args.get("query") %}
+    <ul class="pagination">
+        {% if page == 1 %}
+        <li class="page-item disabled"><a class="page-link">Edellinen</a></li>
+        {% else %}
+        <li class="page-item"><a class="page-link"
+                href="{{url_for('post.search', query=query, page=page-1)}}">Edellinen</a></li>
+        {% endif %}
+        {% for num in page_numbers %}
+        {% if num == page %}
+        <li class="page-item active">
+            <span class="page-link">{{num}}</span>
+        </li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="{{url_for('post.search', query=query,  page=num)}}">{{num}}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+        {% if page == page_numbers[-1] %}
+        <li class="page-item disabled"><a class="page-link">Seuraava</a></li>
+        {% else %}
+        <li class="page-item"><a class="page-link"
+                href="{{url_for('post.search', query=query, page=page+1)}}">Seuraava</a></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endif %}
+{% endblock %}
