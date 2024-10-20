@@ -65,14 +65,14 @@
     {% set page = request.args.get("page") | int %}
     {% set query = request.args.get("query") %}
     <ul class="pagination">
-        {% if page == 1 %}
+        {% if not page or page == 1%}
         <li class="page-item disabled"><a class="page-link">Edellinen</a></li>
         {% else %}
         <li class="page-item"><a class="page-link"
                 href="{{url_for('post.search', query=query, page=page-1)}}">Edellinen</a></li>
         {% endif %}
         {% for num in page_numbers %}
-        {% if num == page %}
+        {% if num == page or (not page and num==1) %}
         <li class="page-item active">
             <span class="page-link">{{num}}</span>
         </li>
@@ -81,7 +81,7 @@
         </li>
         {% endif %}
         {% endfor %}
-        {% if page == page_numbers[-1] %}
+        {% if page == page_numbers[-1] or page_numbers[-1] == 1 %}
         <li class="page-item disabled"><a class="page-link">Seuraava</a></li>
         {% else %}
         <li class="page-item"><a class="page-link"
