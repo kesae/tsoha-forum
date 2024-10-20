@@ -7,17 +7,14 @@
         <li class="breadcrumb-item active" aria-current="page">{{board.title}}</li>
     </ol>
 </nav>
-<header>
-    <h1 class="my-5">{{board.title}}</h1>
-    <p class="lead">{{board.description}}</p>
-</header>
-<h2>Aiheet</h2>
+
+<h1 class="my-5">{{board.title}}</h1>
 <div class="container">
     {% for topic in topics %}
     <section class="row">
         <header class="col">
             <a href="{{url_for('topic.show', topic_id=topic.id)}}">
-                <h3 class="h5">{{topic.title}}</h3>
+                <h2 class="h5">{{topic.title}}</h2>
             </a>
         </header>
         <dl class="col row">
