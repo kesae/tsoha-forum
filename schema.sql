@@ -1,12 +1,12 @@
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
-    username TEXT UNIQUE,
+    username TEXT UNIQUE COLLATE "fi-FI-x-icu",
     password TEXT,
     is_admin BOOLEAN NOT NULL DEFAULT FALSE
 );
 CREATE TABLE IF NOT EXISTS boards (
     id SERIAL PRIMARY KEY,
-    title TEXT UNIQUE,
+    title TEXT UNIQUE COLLATE "fi-FI-x-icu",
     description TEXT,
     access_group INTEGER
         REFERENCES groups (id)
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS topics (
     user_id INTEGER
         REFERENCES users (id)
         ON DELETE CASCADE,
-    title TEXT,
+    title TEXT COLLATE "fi-FI-x-icu",
     board_id INTEGER
         REFERENCES boards (id)
         ON DELETE CASCADE
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS posts (
 );
 CREATE TABLE IF NOT EXISTS groups (
     id SERIAL PRIMARY KEY,
-    title TEXT UNIQUE,
+    title TEXT UNIQUE COLLATE "fi-FI-x-icu",
     description TEXT
 );
 CREATE TABLE IF NOT EXISTS memberships (
