@@ -29,6 +29,10 @@ def add(board_id):
         board_id = int(request.form["board_id"])
         title = request.form["title"]
         content = request.form["content"]
+        if not 5 <= len(title) <= 30:
+            return pages.get_title_length_error()
+        if not 5 <= len(content) <= 10_000:
+            return pages.get_post_length_error()
         topic_id = topics.add_topic(user_id, title, board_id)
         if topic_id:
             posts.add_post(user_id, content, topic_id)
@@ -69,6 +73,8 @@ def show(topic_id):
         if not user_id:
             return pages.get_login_error()
         content = request.form["content"]
+        if not 5 <= len(content) <= 10_000:
+            return pages.get_post_length_error()
         posts.add_post(user_id, content, topic_id)
         return redirect(f"/topic/{topic_id}")
 
@@ -84,6 +90,8 @@ def edit(topic_id):
         return render_template("edit-topic.html", topic=topic)
     if request.method == "POST":
         title = request.form["title"]
+        if not 5 <= len(title) <= 30:
+            return pages.get_title_length_error()
         topics.edit_title(topic_id, title)
         return redirect(url_for("topic.show", topic_id=topic_id))
 

@@ -19,6 +19,8 @@ def edit(post_id):
         return render_template("edit-post.html", post=post)
     if request.method == "POST":
         content = request.form["content"]
+        if not 5 <= len(content) <= 10_000:
+            return pages.get_post_length_error()
         posts.edit_post(post_id, content)
         return redirect(url_for("topic.show", topic_id=post.topic_id))
 

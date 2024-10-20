@@ -32,6 +32,10 @@ def add():
     if request.method == "POST":
         title = request.form["title"]
         description = request.form["description"]
+        if not 5 <= len(title) <= 30:
+            return pages.get_title_length_error()
+        if not len(description) <= 100:
+            return pages.get_long_description_error()
         groups.add_group(title, description)
         return redirect(url_for("group.show_all"))
 
@@ -46,6 +50,10 @@ def edit(group_id):
     if request.method == "POST":
         title = request.form["title"]
         description = request.form["description"]
+        if not 5 <= len(title) <= 30:
+            return pages.get_title_length_error()
+        if not len(description) <= 100:
+            return pages.get_long_description_error()
         if groups.edit_group(group_id, title, description):
             return redirect(url_for("group.show_all"))
         return pages.get_reserved_group_error()

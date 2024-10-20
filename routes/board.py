@@ -35,6 +35,10 @@ def add():
         title = request.form["title"]
         description = request.form["description"]
         access_string = request.form["access_group"]
+        if not 5 <= len(title) <= 30:
+            return pages.get_title_length_error()
+        if not len(description) <= 100:
+            return pages.get_long_description_error()
         try:
             access_group = int(access_string)
         except ValueError:
@@ -72,6 +76,10 @@ def edit(board_id):
         title = request.form["title"]
         description = request.form["description"]
         access_string = request.form["access_group"]
+        if not 5 <= len(title) <= 30:
+            return pages.get_title_length_error()
+        if not len(description) <= 100:
+            return pages.get_long_description_error()
         try:
             access_group = int(access_string)
         except ValueError:

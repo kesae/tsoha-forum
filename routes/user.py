@@ -57,8 +57,12 @@ def register():
         username = request.form["username"]
         password1 = request.form["password1"]
         password2 = request.form["password2"]
+        if 2 <= len(username) <= 30:
+            return pages.get_username_length_error()
         if password1 != password2:
             return render_template("error.html", message="Salasanat eroavat")
+        if len(password1) < 10:
+            pages.get_short_password_error()
         if users.register(username, password1):
             return redirect(url_for("index.show"))
         return pages.get_reserved_username_error()

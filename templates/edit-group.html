@@ -14,11 +14,13 @@
     <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
     <div class="mb-3">
         <label for="title" class="form-label">Uusi nimi</label>
-        <input type="text" id="Ryhmän nimi" name="title" class="form-control" value="{{group.title}}">
+        <input type="text" id="Ryhmän nimi" name="title" class="form-control" value="{{group.title}}" minlength="5"
+            maxlength="30">
     </div>
     <div class="mb-3">
         <label for="description" class="form-label">Uusi kuvaus</label>
-        <input type="text" id="description" name="description" class="form-control" value="{{group.description}}">
+        <input type="text" id="description" name="description" class="form-control" value="{{group.description}}"
+            maxlength="100">
     </div>
     <input type="submit" value="Lähetä" class="btn btn-primary">
 </form>

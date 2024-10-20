@@ -89,7 +89,8 @@
     <input type="hidden" name="topic_id" id="topic_id" value="{{topic_id}}">
     <div class="mb-3">
         <label for="content" class="form-label">Viesti</label>
-        <textarea type="text" id="content" name="content" class="form-control" rows="10"></textarea>
+        <textarea type="text" id="content" name="content" class="form-control" rows="10" minlength="5"
+            maxlength="10000"></textarea>
     </div>
     <input type="submit" value="Lähetä" class="btn btn-primary">
 </form>

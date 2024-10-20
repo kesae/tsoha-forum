@@ -7,11 +7,12 @@
     <input type="hidden" name="board_id" id="board_id" value="{{board_id}}">
     <div class="mb-3">
         <label for="title" class="form-label">Otsikko:</label>
-        <input type="text" id="title" name="title" class="form-control">
+        <input type="text" id="title" name="title" class="form-control" minlength="5" maxlength="100">
     </div>
     <div class="mb-3">
         <label for="content" class="form-label">Viesti:</label>
-        <textarea type="text" id="content" name="content" class="form-control" rows="10"></textarea>
+        <textarea type="text" id="content" name="content" class="form-control" rows="10" minlength="5"
+            maxlength="100000"></textarea>
     </div>
     <input type="submit" value="Lähetä" class="btn btn-primary">
 </form>
