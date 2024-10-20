@@ -1,4 +1,4 @@
-from flask import redirect, url_for, g, Blueprint, session
+from flask import redirect, url_for, g, Blueprint, request
 import memberships
 import errorpages
 
@@ -21,6 +21,10 @@ def add(group_id, user_id):
 @bp.route("/group/<int:group_id>/remove/<int:user_id>", methods=["POST"])
 def remove(group_id, user_id):
     memberships.remove_membership(group_id, user_id)
-    if "url" in session:
-        return redirect(session["url"])
-    return redirect(url_for("group.show", group_id=group_id))
+    group_page = request.form.get("group_page")
+    print("Group page", group_page)
+    if group_page:
+        page = int(group_page)
+        return redirect(url_for("group.show", group_id=group_id, mpage=page))
+
+    return redirect(url_for("user.show", user_id=user_id))

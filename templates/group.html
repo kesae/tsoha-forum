@@ -25,6 +25,7 @@
         <div class="col my-auto">
             <form action="{{url_for('membership.remove', group_id=group.id, user_id=member.id)}}" method="post">
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <input type="hidden" name="group_page" value="{{request.args.get('mpage')}}">
                 <input type="submit" value="Poista ryhmästä" class="btn btn-danger">
             </form>
         </div>
