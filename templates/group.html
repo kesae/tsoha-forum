@@ -11,6 +11,52 @@
         <dt>Jäsenmäärä</dt>
         <dd>{{group.member_count}}</dd>
     </dl>
+    <h2>Jäsenet</h2>
+    {% if not members %}
+    <p>Ei jäseniä</p>
+    {% endif %}
+    {% for member in members %}
+    <section class="row border-bottom">
+        <header class="col my-auto">
+            <a href="{{url_for('user.show', user_id=member.id)}}">
+                <h3 class="h5 my-3">{{member.username}}</h3>
+            </a>
+        </header>
+        <div class="col my-auto">
+            <form action="{{url_for('membership.remove', group_id=group.id, user_id=member.id)}}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <input type="submit" value="Poista ryhmästä" class="btn btn-danger">
+            </form>
+        </div>
+    </section>
+    {% endfor %}
+    <nav aria-label="Ryhmän jäsenten selaus" class="my-3">
+        {% set mpage = request.args.get("mpage") | int %}
+        <ul class="pagination">
+            {% if not mpage or mpage == 1 %}
+            <li class="page-item disabled"><a class="page-link">Edellinen</a></li>
+            {% else %}
+            <li class="page-item"><a class="page-link"
+                    href="{{url_for('group.show', group_id=group.id, mpage=mpage-1)}}">Edellinen</a></li>
+            {% endif %}
+            {% for num in page_numbers %}
+            {% if num == mpage or (not mpage and num==1) %}
+            <li class="page-item active">
+                <span class="page-link">{{num}}</span>
+            </li>
+            {% else %}
+            <li class="page-item"><a class="page-link"
+                    href="{{url_for('group.show', group_id=group.id, mpage=num)}}">{{num}}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if mpage == page_numbers[-1] or page_numbers[-1] == 1 %}
+            <li class="page-item disabled"><a class="page-link">Seuraava</a></li>
+            {% else %}
+            <li class="page-item"><a class="page-link"
+                    href="{{url_for('group.show', group_id=group.id, mpage=mpage+1)}}">Seuraava</a></li>
+            {% endif %}
+        </ul>
+    </nav>
 </article>
 
 {% endblock %}

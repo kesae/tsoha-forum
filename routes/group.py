@@ -1,7 +1,8 @@
 from flask import redirect, render_template, request, url_for, g, Blueprint
 import groups
+import memberships
 import errorpages
-from utils import check_password
+from utils import check_password, create_page_numbers
 
 bp = Blueprint("group", __name__)
 
@@ -19,10 +20,26 @@ def show_all():
 
 @bp.route("/group/<int:group_id>", methods=["GET", "POST"])
 def show(group_id):
+    PAGE_SIZE = 20
+    try:
+        member_page = int(request.args.get("mpage", 1))
+    except ValueError:
+        return errorpages.get_page_missing()
     group = groups.get_group(group_id)
     if not group:
         return errorpages.get_page_missing()
-    return render_template("group.html", group=group)
+    member_count = memberships.get_group_member_count(group_id)
+    last_page = max(0, member_count - 1) // (PAGE_SIZE) + 1
+    limited_page = min(max(1, member_page), last_page)
+    if limited_page != member_page:
+        return redirect(
+            url_for("group.show", group_id=group_id, mpage=limited_page)
+        )
+    page_numbers = create_page_numbers(member_page, last_page)
+    members = memberships.get_paginated_members(group_id, member_page)
+    return render_template(
+        "group.html", group=group, members=members, page_numbers=page_numbers
+    )
 
 
 @bp.route("/group/add", methods=["GET", "POST"])
