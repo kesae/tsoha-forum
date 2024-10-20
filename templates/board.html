@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{url_for('index.show')}}">Etusivu</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{board.title}}</li>
+    </ol>
+</nav>
 <header>
     <h1>{{board.title}}</h1>
     <p class="lead">{{board.description}}</p>

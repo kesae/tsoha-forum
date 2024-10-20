@@ -1,8 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<a href="{{url_for('board.show', board_id=topic.board_id)}}"><b>{{topic.board_title}}</b></a> >>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{url_for('index.show')}}">Etusivu</a></li>
+        <li class="breadcrumb-item"><a
+                href="{{url_for('board.show', board_id=topic.board_id)}}">{{topic.board_title}}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{topic.title}}</li>
+    </ol>
+</nav>
+<a href="{{url_for('board.show', board_id=topic.board_id)}}">{{topic.board_title}}</a> >>
 <section class="topic">
     <h1>{{topic.title}}</h1>
     {% if g.user and (g.user.id == topic.user_id or g.user.is_admin) %}
