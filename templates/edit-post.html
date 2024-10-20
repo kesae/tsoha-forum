@@ -6,7 +6,7 @@
     <form action="{{url_for('post.edit', post_id=post.id)}}" method="post">
         <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
         <p>
-            <label for="content">Muokkaa tekstiä:</label>
+            <label for="content">Muokkaa tekstiä</label>
             <textarea type="text" id="content" name="content">{{post.content}}</textarea>
         </p>
         <p>

@@ -11,7 +11,7 @@
 <form action="{{url_for('board.remove', board_id=board.id)}}" method="post">
     <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
     <div class="mb-3">
-        <label for="password" class="form-label">Salasanavahvistus:</label>
+        <label for="password" class="form-label">Salasanavahvistus</label>
         <input type="password" id="password" name="password" class="form-control">
     </div>
     <input type="submit" value="Poista" class="btn btn-danger">

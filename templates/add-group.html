@@ -5,11 +5,11 @@
 <form action="{{url_for('group.add')}}" method="post">
     <input type="hidden" name="csrf_token" value="{{session.csrf_token}}">
     <div class="mb-3">
-        <label for="title" class="form-label">Otsikko:</label>
+        <label for="title" class="form-label">Otsikko</label>
         <input type="text" id="otsikko" name="title" class="form-control" minlength="5" maxlength="30">
     </div>
     <div class="mb-3">
-        <label for="description" class="form-label">Kuvaus:</label>
+        <label for="description" class="form-label">Kuvaus</label>
         <input type="text" id="description" name="description" class="form-control" maxlength="100">
     </div>
     <input type="submit" value="Lähetä" class="btn btn-primary">
