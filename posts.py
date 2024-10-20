@@ -215,7 +215,7 @@ def get_post_location(post_id):
     sql_string = """
         SELECT
             t.id topic_id,
-            COUNT(*)
+            COUNT(*) - 1
         FROM
             topics t 
             JOIN
@@ -234,7 +234,7 @@ def get_post_location(post_id):
             WHERE
                 p.id = :post_id
             )
-            AND (p.created_at, p.id) < ((
+            AND (p.created_at, p.id) <= ((
                 SELECT
                     created_at,
                     id
